@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # include the providers you want to enable:
     # 'allauth.socialaccount.providers.google',
     # 'allauth.socialaccount.providers.facebook',
+    'home',
 ]
 
 MIDDLEWARE = [
@@ -64,7 +65,10 @@ ROOT_URLCONF = 'magazi.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'), # This is the directory where Django will look for templates. We need to add this to the TEMPLATES setting in the settings.py file.
+            os.path.join(BASE_DIR, 'templates', 'allauth'), # This is the directory where Django will look for the allauth templates. We need to add this to the TEMPLATES setting in the settings.py file.
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
