@@ -1,23 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
-</head>
-<body>
-    <h1>Product List</h1>
-    <ul>
+{% extends "base.html" %}
+{% load static %}
+{% block extracss %}
+    <link href="{% static 'css/products.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/products.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="text-center">Product List</h1>
+    
+    <!-- Toggle Buttons -->
+    <div class="d-flex justify-content-end mb-3">
+        <button id="toggle-list" class="btn btn-outline-primary me-2">List View</button>
+        <button id="toggle-grid" class="btn btn-outline-primary">Grid View</button>
+    </div>
+
+    <!-- Product Container -->
+    <div id="product-container" class="row row-cols-1 row-cols-md-2 g-4">
         {% for product in products %}
-            <li>
-                <h2>{{ product.name }}</h2>
-                <p>{{ product.description }}</p>
-                <p>Price: £{{ product.price }}</p>
-                {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 200px;">
-                {% endif %}
-            </li>
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    {% else %}
+                        {% comment %} <img src="https://via.placeholder.com/150" class="card-img-top" alt="Placeholder"> {% endcomment %}
+                        {% comment %} <img src="{% static 'images/placeholder.png' %}" class="card-img-top" alt="Placeholder"> {% endcomment %}
+                        <div class="card-img-top d-flex justify-content-center align-items-center bg-light" style="height: 150px;">
+                            <i class="bi bi-box-seam" style="font-size: 2rem; color: #6c757d;"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+                        <p class="card-text text-primary fw-bold">£{{ product.price }}</p>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
-</body>
-</html>
+    </div>
+</div>
+{% endblock %}
