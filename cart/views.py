@@ -8,11 +8,24 @@ from django.http import JsonResponse
 def add_to_cart(request, product_id):
     print("View add_to_cart function")
     product = get_object_or_404(Product, id=product_id)
+
+    # Check stock availability
+    if product.stock <= 0:
+        return JsonResponse({"error": "Product is out of stock."}, status=400)
+
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+
+    # Update quantity or create new item
     if not created:
-        cart_item.quantity += 1
-        cart_item.save()
+        if cart_item.quantity < product.stock:
+            cart_item.quantity += 1
+        else:
+            return JsonResponse({"error": "Cannot exceed available stock."}, status=400)
+    else:
+        cart_item.quantity = 1
+
+    cart_item.save()
     return redirect('cart_view')
 
 
@@ -23,8 +36,11 @@ def view_cart(request):
     total_cost = 0
 
     if cart:
-        # Calculate the total cost
-        total_cost = sum(item.quantity * item.product.price for item in cart.items.all())
+        # Calculate the total for the cart and for each item
+        for item in cart.items.all():
+            item.total = item.quantity * item.product.price  # Calculate item total dynamically
+            total_cost += item.total  # Add to the cart's total cost
+        print(f"Product: {item.product.name}, Quantity: {item.quantity}, Total: {item.total}")
 
     return render(request, 'cart/cart_view.html', {'cart': cart, 'total_cost': total_cost})
 
@@ -55,11 +71,16 @@ def update_cart_quantity(request, item_id):
 
     if cart_item.cart.user == request.user:
         new_quantity = int(request.POST.get('quantity', 1))
+
+        # Validate against available stock
+        if new_quantity > cart_item.product.stock:
+            new_quantity = cart_item.product.stock  # Cap at available stock
+
         if new_quantity > 0:
             cart_item.quantity = new_quantity
             cart_item.save()
         else:
-            cart_item.delete()
+            cart_item.delete()  # Remove item if quantity is 0 or less
 
         # Recalculate totals
         cart_total = sum(item.quantity * item.product.price for item in cart_item.cart.items.all())
@@ -67,8 +88,8 @@ def update_cart_quantity(request, item_id):
 
         return JsonResponse({
             "item_quantity": cart_item.quantity,
-            "item_total": float(item_total),  # Ensure numeric type
-            "cart_total": float(cart_total),  # Ensure numeric type
+            "item_total": float(item_total),
+            "cart_total": float(cart_total),
         })
 
     return JsonResponse({"error": "Unauthorized"}, status=403)

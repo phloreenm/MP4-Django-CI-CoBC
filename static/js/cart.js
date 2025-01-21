@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    // Update quantity via AJAX
     $(".update-quantity").on("click", function () {
         const row = $(this).closest("tr");
         const itemId = row.data("item-id");
@@ -10,6 +9,11 @@ $(document).ready(function () {
         // Increment or decrement quantity
         if (action === "increment") newQuantity++;
         if (action === "decrement" && newQuantity > 1) newQuantity--;
+
+        // Debug: Log values
+        console.log("Item ID:", itemId);
+        console.log("Action:", action);
+        console.log("New Quantity:", newQuantity);
 
         // Send AJAX request
         $.ajax({
@@ -28,20 +32,26 @@ $(document).ready(function () {
                     // Update the cart total
                     $("#cart-total").text(`Total Cost: £${response.cart_total.toFixed(2)}`);
                 } else {
+                    console.error("Invalid server response:", response);
                     alert("Invalid response from the server.");
                 }
             },
-            error: function () {
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", error);
+                console.error("Status:", status);
                 alert("Failed to update the cart. Please try again.");
             },
         });
     });
 
-    // Update total on quantity input change (focus out)
     $(".quantity-input").on("change", function () {
         const row = $(this).closest("tr");
         const itemId = row.data("item-id");
         const newQuantity = parseInt($(this).val());
+
+        // Debug: Log values
+        console.log("Item ID (on change):", itemId);
+        console.log("New Quantity (on change):", newQuantity);
 
         // Send AJAX request
         $.ajax({
@@ -59,10 +69,13 @@ $(document).ready(function () {
                     // Update the cart total
                     $("#cart-total").text(`Total Cost: £${response.cart_total.toFixed(2)}`);
                 } else {
+                    console.error("Invalid server response:", response);
                     alert("Invalid response from the server.");
                 }
             },
-            error: function () {
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", error);
+                console.error("Status:", status);
                 alert("Failed to update the cart. Please try again.");
             },
         });

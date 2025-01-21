@@ -41,9 +41,15 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center mt-3">
                             <p class="card-text text-primary fw-bold mb-0">£{{ product.price }}</p>
-                            <a href="{% url 'add_to_cart' product.id %}" class="add-to-cart" title="Add to Cart">
-                                <i class="bi bi-cart-plus" style="font-size: 1.5rem; color: #0d6efd;"></i>
-                            </a>
+                            {% if product.stock > 0 %}
+                                <a href="{% url 'add_to_cart' product.id %}" class="add-to-cart" title="Add to Cart">
+                                    <i class="bi bi-cart-plus" style="font-size: 1.5rem; color: #0d6efd;"></i>
+                                </a>
+                            {% else %}
+                                <span class="text-danger" title="Out of Stock">
+                                    <i class="bi bi-exclamation-circle" style="font-size: 1.5rem;"></i>
+                                </span>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

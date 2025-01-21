@@ -19,10 +19,15 @@
             <h1>{{ product.name }}</h1>
             <p>{{ product.description }}</p>
             <p class="text-primary fw-bold">Price: £{{ product.price }}</p>
-            <!-- Fixed Add to Cart Button -->
-            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">
-                <i class="bi bi-cart-plus"></i> Add to Cart
-            </a>
+            {% if product.stock > 0 %}
+                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">
+                    <i class="bi bi-cart-plus"></i> Add to Cart
+                </a>
+            {% else %}
+                <span class="text-danger">
+                    <i class="bi bi-exclamation-circle"></i> Out of Stock
+                </span>
+            {% endif %}
         </div>
     </div>
 </div>
