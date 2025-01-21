@@ -1,0 +1,18 @@
+/* Styling for list view */
+.list-view > .col {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+}
+.list-view img {
+    max-width: 150px;
+    height: auto;
+}
+.list-view .card {
+    flex: 1;
+    border: none;
+    box-shadow: none;
+}
