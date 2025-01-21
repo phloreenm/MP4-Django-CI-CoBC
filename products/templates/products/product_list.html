@@ -26,22 +26,25 @@
     <div id="product-container" class="row row-cols-1 row-cols-md-2 g-4">
         {% for product in products %}
             <div class="col">
-                <div class="card h-100 shadow-sm">
+                <div class="card h-100 shadow-sm position-relative">
                     {% if product.image %}
                         <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
                     {% else %}
-                        {% comment %} <img src="https://via.placeholder.com/150" class="card-img-top" alt="Placeholder"> {% endcomment %}
-                        {% comment %} <img src="{% static 'images/placeholder.png' %}" class="card-img-top" alt="Placeholder"> {% endcomment %}
-                        <div class="card-img-top d-flex justify-content-center align-items-center bg-light" style="height: 150px;">
-                            <i class="bi bi-box-seam" style="font-size: 2rem; color: #6c757d;"></i>
-                        </div>
+                        <i class="bi bi-box-seam card-img-top" style="font-size: 3rem; color: #6c757d; text-align: center;"></i>
                     {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
-                        </h5>
-                        <p class="card-text">{{ product.description|truncatechars:100 }}</p>
-                        <p class="card-text text-primary fw-bold">£{{ product.price }}</p>
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="card-title">
+                                <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+                            </h5>
+                            <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <p class="card-text text-primary fw-bold mb-0">£{{ product.price }}</p>
+                            <a href="#" class="add-to-cart" title="Add to Cart">
+                                <i class="bi bi-cart-plus" style="font-size: 1.5rem; color: #0d6efd;"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
