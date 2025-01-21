@@ -33,7 +33,9 @@
                         </div>
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">{{ product.name }}</h5>
+                        <h5 class="card-title">
+                            <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+                        </h5>
                         <p class="card-text">{{ product.description|truncatechars:100 }}</p>
                         <p class="card-text text-primary fw-bold">£{{ product.price }}</p>
                     </div>
