@@ -22,57 +22,36 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in cart.items.all %}
-        <tr data-item-id="{{ item.id }}">
-            <td>{{ item.product.name }}</td>
-            <td>
-                <div class="input-group">
-                    <button class="btn btn-outline-secondary btn-sm update-quantity" data-action="decrement">-</button>
-                    <input type="number" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" class="form-control form-control-sm text-center quantity-input">
-                    <button class="btn btn-outline-secondary btn-sm update-quantity" data-action="increment">+</button>
-                </div>
-                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-                {% if item.product.stock <= 0 %}
-                    <small class="text-danger">Out of stock</small>
-                {% endif %}
-            </td>
-            <td>£{{ item.product.price }}</td>
-            <td class="item-total">£{{ item.total|floatformat:2 }}</td>
-            <td>
-                <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm">Remove</a>
-            </td>
-        </tr>
-    {% endfor %}
-            {% comment %} {% for item in cart.items.all %}
-                <tr data-item-id="{{ item.id }}" class="cart-item-row">
-                    <td>{{ item.product.name }}</td>
-                    <td>
-                        <div class="input-group">
-                            <!-- Quantity Adjustment Buttons -->
-                            <button class="btn btn-outline-secondary btn-sm update-quantity" data-action="decrement">-</button>
-                            <input type="number" value="{{ item.quantity }}" min="1" class="form-control form-control-sm text-center quantity-input" id="quantity-{{ item.id }}">
-                            <button class="btn btn-outline-secondary btn-sm update-quantity" data-action="increment">+</button>
-                        </div>
-                        <!-- CSRF Token -->
-                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-                    </td>
-                    <td>£{{ item.product.price }}</td>
-                    <td class="item-total" id="item-total-{{ item.id }}">£{{ item.quantity|floatformat:2|add:item.product.price }}</td>
-                    <td>
-                        <!-- Remove Product Button -->
-                        <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm">Remove</a>
-                    </td>
-                </tr>
-            {% endfor %} {% endcomment %}
-        </tbody>
-    </table>
-
-    <!-- Total Cost -->
-    <div class="mt-3">
-        <h5 id="cart-total">Total Cost: £{{ total_cost|floatformat:2 }}</h5>
-    </div>
-    {% else %}
-        <p>Your cart is empty.</p>
-    {% endif %}
+                {% for item in cart.items.all %}
+                    <tr data-item-id="{{ item.id }}">
+                        <td>{{ item.product.name }}</td>
+                        <td>
+                            <div class="input-group">
+                                <button class="btn btn-outline-secondary btn-sm update-quantity" data-action="decrement">-</button>
+                                <input type="number" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" class="form-control form-control-sm text-center quantity-input">
+                                <button class="btn btn-outline-secondary btn-sm update-quantity" data-action="increment">+</button>
+                            </div>
+                            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                            {% if item.product.stock <= 0 %}
+                                <small class="text-danger">Out of stock</small>
+                            {% endif %}
+                        </td>
+                        <td>£{{ item.product.price }}</td>
+                        {% comment %} <td class="item-total">£{{ item.total|floatformat:2 }}</td> {% endcomment %}
+                        <td class="item-total">£{{ item.total }}</td>
+                        <td>
+                            <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm">Remove</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <!-- Total Cost -->
+            <div class="mt-3">
+                <h5 id="cart-total">Total Cost: £{{ total_cost|floatformat:2 }}</h5>
+            </div>
+            {% else %}
+                <p>Your cart is empty.</p>
+            {% endif %}
 </div>
 {% endblock %}

@@ -6,29 +6,51 @@ from django.http import JsonResponse
 
 @login_required
 def add_to_cart(request, product_id):
-    print("View add_to_cart function")
     product = get_object_or_404(Product, id=product_id)
-
-    # Check stock availability
-    if product.stock <= 0:
-        return JsonResponse({"error": "Product is out of stock."}, status=400)
+    print(f"Adding product: {product.name}, Stock: {product.stock}")
 
     cart, created = Cart.objects.get_or_create(user=request.user)
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    print(f"Cart created: {created}, User: {request.user}")
 
-    # Update quantity or create new item
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    print(f"Cart item created: {created}, Quantity before: {cart_item.quantity}")
+
     if not created:
         if cart_item.quantity < product.stock:
             cart_item.quantity += 1
+            print(f"Updated quantity: {cart_item.quantity}")
         else:
+            print("Cannot exceed available stock.")
             return JsonResponse({"error": "Cannot exceed available stock."}, status=400)
     else:
         cart_item.quantity = 1
+        print("New item added with quantity 1.")
 
     cart_item.save()
     return redirect('cart_view')
 
 
+# @login_required
+# def view_cart(request):
+#     """Displays the user's shopping cart."""
+#     cart = Cart.objects.filter(user=request.user).first()  # Retrieve the user's cart
+#     total_cost = 0
+#     items_with_totals = []
+
+#     if cart:
+#         for item in cart.items.all():
+#             item_total = item.quantity * item.product.price
+#             total_cost += item_total
+#             items_with_totals.append({
+#                 'id': item.id,
+#                 'product_name': item.product.name,
+#                 'quantity': item.quantity,
+#                 'price': item.product.price,
+#                 'total': item_total,
+#             })
+#             print(f"Product in cart: {item.product.name}, Quantity: {item.quantity}, Price: {item.product.price} , Item Total: {item_total}")
+
+#     return render(request, 'cart/cart_view.html', {'items': items_with_totals, 'total_cost': total_cost})
 @login_required
 def view_cart(request):
     """Displays the user's shopping cart."""
@@ -36,13 +58,14 @@ def view_cart(request):
     total_cost = 0
 
     if cart:
-        # Calculate the total for the cart and for each item
+        print(f"Cart contains: {cart.items.all()}")
+  
         for item in cart.items.all():
-            item.total = item.quantity * item.product.price  # Calculate item total dynamically
-            total_cost += item.total  # Add to the cart's total cost
-        print(f"Product: {item.product.name}, Quantity: {item.quantity}, Total: {item.total}")
+            item.total = item.quantity * item.product.price  # Calculează totalul pentru fiecare produs
+            total_cost += item.total  # Adaugă la totalul coșului
+            print(f"Product in cart: {item.product.name}, Quantity: {item.quantity}, Price: {item.product.price} , Item Total: {item.total}")
 
-    return render(request, 'cart/cart_view.html', {'cart': cart, 'total_cost': total_cost})
+    return render(request, 'cart/cart_view.html', {'cart': cart, 'item.total': item.total, 'total_cost': total_cost})
 
 
 def remove_from_cart(request, item_id):
