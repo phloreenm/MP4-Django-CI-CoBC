@@ -97,6 +97,16 @@
                                 Customers
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'cart:view_cart' %}">
+                                <i class="fas fa-shopping-cart"></i>
+                                {% if cart_total %}
+                                    £{{ cart_total }}
+                                {% else %}
+                                    Cart
+                                {% endif %}
+                            </a>
+                        </li>
                     </ul>
                   </div>
               </div>
