@@ -3,44 +3,42 @@
 {% block content %}
 <div class="container my-4">
     <h1>Your Shopping Cart</h1>
-    {% if cart %}
+    {% if cart_items %}
     <table class="table">
         <thead>
             <tr>
                 <th>Product</th>
-                <th>Quantity</th>
                 <th>Price</th>
+                <th>Quantity</th>
                 <th>Total</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for item_id, item_data in cart.items %}
+            {% for item in cart_items %}
             <tr>
-                <td>{{ item_data.product.name }}</td>
+                <td>{{ item.product.name }}</td>
+                <td>£{{ item.product.price }}</td>
                 <td>
-                    <div class="input-group">
-                        <form method="post" action="{% url 'cart:update_quantity' item_id %}">
-                            {% csrf_token %}
-                            <input type="number" name="quantity" value="{{ item_data.quantity }}" min="1" max="{{ item_data.product.stock }}" class="form-control form-control-sm text-center">
-                            <button type="submit" class="btn btn-primary btn-sm">Update</button>
-                        </form>
-                    </div>
+                    <form method="post" action="{% url 'cart:update_quantity' item.product.id %}">
+                        {% csrf_token %}
+                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" class="form-control form-control-sm text-center">
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    </form>
                 </td>
-                <td>£{{ item_data.product.price }}</td>
-                <td>£{{ item_data.quantity|floatformat:2 }}</td>
+                <td>£{{ item.total }}</td>
                 <td>
-                    <a href="{% url 'cart:remove_from_cart' item_id %}" class="btn btn-danger btn-sm">Remove</a>
+                    <a href="{% url 'cart:remove_from_cart' item.product.id %}" class="btn btn-danger btn-sm">Remove</a>
                 </td>
             </tr>
-        {% endfor %}
+            {% endfor %}
         </tbody>
     </table>
     <div class="mt-3">
         <h5>Total Cost: £{{ total_cost|floatformat:2 }}</h5>
     </div>
-    {% else %}
-        <p>Your cart is empty.</p>
-    {% endif %}
+{% else %}
+    <p>Your cart is empty.</p>
+{% endif %}
 </div>
 {% endblock %}
