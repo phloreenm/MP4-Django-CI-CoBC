@@ -34,8 +34,9 @@
         <p>Your cart is empty.</p>
     {% endif %}
 </div>
+{% endblock %}
 
-<script src="https://js.stripe.com/v3/"></script>
+{% block postloadjs %}
 <script>
     const stripe = Stripe('{{ stripe_public_key }}');
     const checkoutButton = document.getElementById('checkout-button');
@@ -55,6 +56,24 @@
                 console.error("Error:", data.error);
             }
         });
+    });
+
+    fetch("{% url 'checkout:create_checkout_session' %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.id) {
+            stripe.redirectToCheckout({ sessionId: data.id });
+        } else {
+            console.error("Error:", data.error);
+        }
+    })
+    .catch(error => {
+        console.error("Fetch error:", error);
     });
 </script>
 {% endblock %}
