@@ -36,3 +36,4 @@ Restart Django and Your Shell
  - Boostrap 5.3 
  - Stripe
  - python-decouple
+ - django-countries
