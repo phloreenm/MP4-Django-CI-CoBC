@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'cart',
     'checkout',
     'django_countries',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -175,3 +177,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 STRIPE_PUBLIC_KEY = config("STRIPE_PUBLIC_KEY")
 STRIPE_SECRET_KEY = config("STRIPE_SECRET_KEY")
+
+STRIPE_CURRENCY = "gbp"
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'

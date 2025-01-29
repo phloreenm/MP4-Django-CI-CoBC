@@ -37,3 +37,6 @@ Restart Django and Your Shell
  - Stripe
  - python-decouple
  - django-countries
+ - django-crispy-forms
+ - crispy-bootstrap5
+ - 

@@ -1,10 +1,11 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 <div class="container my-4">
     <h1>Checkout</h1>
 
-    <!-- Afișează lista produselor -->
+    <!-- Order Summary -->
     {% if cart_items %}
         <table class="table">
             <thead>
@@ -29,51 +30,80 @@
         <div class="mt-3">
             <h5>Total Cost: £{{ total_cost|floatformat:2 }}</h5>
         </div>
-        <button id="checkout-button" class="btn btn-primary">Pay Now</button>
     {% else %}
         <p>Your cart is empty.</p>
     {% endif %}
+
+    <!-- Checkout Form -->
+    <form id="payment-form">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Billing Information</legend>
+            {{ order_form.full_name | as_crispy_field }}
+            {{ order_form.email | as_crispy_field }}
+            {{ order_form.phone_number | as_crispy_field }}
+            {{ order_form.street_address1 | as_crispy_field }}
+            {{ order_form.street_address2 | as_crispy_field }}
+            {{ order_form.town_or_city | as_crispy_field }}
+            {{ order_form.postcode | as_crispy_field }}
+            {{ order_form.country | as_crispy_field }}
+            {{ order_form.county | as_crispy_field }}
+        </fieldset>
+
+        <!-- Stripe Card Element -->
+        <fieldset>
+            <legend>Payment Details</legend>
+            <div id="card-element"></div>
+            <div id="card-errors" role="alert"></div>
+        </fieldset>
+
+        <button type="submit" class="btn btn-primary mt-3">Complete Order</button>
+    </form>
 </div>
 {% endblock %}
 
 {% block postloadjs %}
+
 <script>
     const stripe = Stripe('{{ stripe_public_key }}');
-    const checkoutButton = document.getElementById('checkout-button');
+    const elements = stripe.elements();
+    const card = elements.create('card');
+    card.mount('#card-element');
 
-    checkoutButton.addEventListener('click', function () {
-        fetch("{% url 'checkout:create_checkout_session' %}", {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": "{{ csrf_token }}",
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.id) {
-                stripe.redirectToCheckout({ sessionId: data.id });
-            } else {
-                console.error("Error:", data.error);
-            }
+    const form = document.getElementById('payment-form');
+
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+            type: "card",
+            card: card,
         });
-    });
 
-    fetch("{% url 'checkout:create_checkout_session' %}", {
-        method: "POST",
-        headers: {
-            "X-CSRFToken": "{{ csrf_token }}",
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.id) {
-            stripe.redirectToCheckout({ sessionId: data.id });
+        if (error) {
+            document.getElementById('card-errors').textContent = error.message;
         } else {
-            console.error("Error:", data.error);
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            const formData = new FormData(form);
+            formData.append('payment_method_id', paymentMethod.id);
+
+            fetch("{% url 'checkout:process_payment' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken,
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    document.getElementById('card-errors').textContent = data.error;
+                }
+            })
+            .catch(error => console.error("Fetch error:", error));
         }
-    })
-    .catch(error => {
-        console.error("Fetch error:", error);
     });
 </script>
 {% endblock %}

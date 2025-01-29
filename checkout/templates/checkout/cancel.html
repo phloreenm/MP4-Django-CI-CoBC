@@ -3,7 +3,11 @@
 {% block content %}
 <div class="container my-4">
     <h1>Payment Canceled</h1>
-    <p>Your payment has been canceled. If this was a mistake, please try again.</p>
-    <a href="/" class="btn btn-primary">Return to Home</a>
+    <p>Your payment was canceled. If you wish to proceed, you can return to your cart or retry checkout.</p>
+
+    <div class="mt-4">
+        <a href="{% url 'cart:view_cart' %}" class="btn btn-secondary">Return to Cart</a>
+        <a href="{% url 'checkout:checkout' %}" class="btn btn-primary">Retry Checkout</a>
+    </div>
 </div>
 {% endblock %}
