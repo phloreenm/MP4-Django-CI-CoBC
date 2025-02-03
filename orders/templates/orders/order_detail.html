@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-4">
+    <h1>Order Details</h1>
+    <p><strong>Order Number:</strong> {{ order.order_number }}</p>
+    <p><strong>Date:</strong> {{ order.date|date:"F j, Y, g:i a" }}</p>
+    <p><strong>Status:</strong> {{ order.status }}</p>
+    <p><strong>Grand Total:</strong> £{{ order.grand_total }}</p>
+    <p><strong>Comments:</strong> {{ order.comments }}</p>
+    <hr>
+    <h3>Items</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Line Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.lineitems.all %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>£{{ item.lineitem_total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="mt-4">
+        <a href="{% url 'orders:my_orders' %}" class="btn btn-secondary">Back to Orders</a>
+    </div>
+</div>
+{% endblock %}
