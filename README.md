@@ -5,17 +5,34 @@ This is a Django-based full-stack e-commerce web application that allows users t
 ---
 
 ## **Table of Contents**
-- [Project Overview](#project-overview)
-- [UX & UI Design](#ux-ui-design)
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Installation & Setup](#installation--setup)
-- [Database Schema](#database-schema)
-- [Stripe Payments](#stripe-payments)
-- [Testing](#testing)
-- [Deployment](#deployment)
-- [Credits](#credits)
-- [Future Enhancements](#future-enhacements)
+- [MP4 Full Stack E-Shop](#mp4-full-stack-e-shop)
+  - [**Table of Contents**](#table-of-contents)
+  - [**Project Overview**](#project-overview)
+  - [**Features**](#features)
+    - [**Users \& Authentication**](#users--authentication)
+    - [**E-Commerce Functionality**](#e-commerce-functionality)
+    - [**Admin \& Backend**](#admin--backend)
+    - [**Security \& Performance**](#security--performance)
+  - [**Technologies Used**](#technologies-used)
+  - [**Installation \& Setup**](#installation--setup)
+    - [**1. Create a Virtual Environment**](#1-create-a-virtual-environment)
+      - [**Linux/macOS:**](#linuxmacos)
+      - [**Windows:**](#windows)
+    - [**2. Install Dependencies**](#2-install-dependencies)
+    - [**3. Apply Migrations**](#3-apply-migrations)
+    - [**4. Run the Server**](#4-run-the-server)
+  - [**Database Schema**](#database-schema)
+  - [**Stripe Payments**](#stripe-payments)
+  - [**Testing**](#testing)
+  - [**Deployment**](#deployment)
+  - [**UX \& UI Design**](#ux--ui-design)
+  - [**Features in Detail**](#features-in-detail)
+  - [**Security \& Data Protection**](#security--data-protection)
+  - [**Performance Optimization**](#performance-optimization)
+  - [**API \& External Integrations**](#api--external-integrations)
+  - [**Error Handling \& Debugging**](#error-handling--debugging)
+  - [**Future Enhancements**](#future-enhancements)
+  - [**Credits**](#credits)
 
 ---
 
@@ -73,7 +90,7 @@ source venv/bin/activate
 
 #### **Windows:**
 ```bash
-python3 -m venv venv
+python -m venv venv
 venv\Scripts\activate
 ```
 
@@ -84,144 +101,77 @@ pip install -r requirements.txt
 
 ### **3. Apply Migrations**
 ```bash
-python3 manage.py migrate
+python manage.py migrate
 ```
 
 ### **4. Run the Server**
 ```bash
-python3 manage.py runserver 
+python manage.py runserver
 ```
 The app will be available at `http://127.0.0.1:8000/`.
 
 ---
 
 ## **Database Schema**
-The application uses a **relational database** (SQLite locally, PostgreSQL in production).
-
-### **Models**
-- `Product`: Stores product details (name, description, price, stock).
-- `Order`: Stores order details (user, total cost, payment status).
-- `OrderLineItem`: Links products to an order.
-- `UserProfile`: Stores user purchase history.
-
-### **Database Migrations**
-Run the following to apply database changes:
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
-
----
 
 ## **Stripe Payments**
-### **Testing Interactively**
-When testing payments, use a **Stripe test card**:
-- **Card Number:** `4242 4242 4242 4242`
-- **Expiry Date:** Any future date (`12/34`)
-- **CVC:** Any 3-digit number (`123`)
-
-### **Test Stripe Webhooks Locally**
-#### **Stripe CLI**
-1. Install Stripe CLI:
-   ```bash
-   brew install stripe/stripe-cli  # Mac
-   sudo apt install stripe  # Linux
-   ```
-2. Log in:
-   ```bash
-   stripe login
-   ```
-3. Forward webhooks:
-   ```bash
-   stripe listen --forward-to localhost:8000/checkout/webhook/
-   ```
-4. Trigger a test event:
-   ```bash
-   stripe trigger checkout.session.completed
-   ```
-
-#### **Fix Stripe Keys Issues**
-If Stripe keys don’t work, check for **environment variables**:
-```bash
-env | grep STRIPE
-```
-To unset global variables:
-```bash
-unset STRIPE_PUBLIC_KEY
-unset STRIPE_SECRET_KEY
-```
-Then restart Django:
-```bash
-python manage.py runserver
-```
-
----
 
 ## **Testing**
-The project includes both **manual and automated tests**.
 
-### **Manual Testing**
-- Tested across **multiple browsers** (Chrome, Firefox).
-- Validated with **Chrome DevTools** for responsive design.
-- Ensured that checkout and payments work correctly.
-
-### **Unit & Integration Testing**
-Run Django tests using:
-```bash
-python manage.py test
-```
-
-<!-- ### **Code Validation**
-- **HTML Validation**: [W3C Validator](https://validator.w3.org/)
-- **CSS Validation**: [W3C CSS Validator](https://jigsaw.w3.org/css-validator/)
-- **Python Code Linting**: `flake8` -->
+## **Deployment**
 
 ---
 
-## **Deployment**
-<!-- This project is deployed on **Heroku**. -->
+## **UX & UI Design**
+- Wireframes & Mockups
+- User Stories
+- Navigation Structure
+- Responsive Design Considerations
 
-### **Steps to Deploy**
-1. Create a **Heroku App**:
-   ```bash
-   heroku create your-app-name
-   ```
-2. Add the **Heroku Postgres Add-on**:
-   ```bash
-   heroku addons:create heroku-postgresql:hobby-dev
-   ```
-3. Set environment variables:
-   ```bash
-   heroku config:set SECRET_KEY='your-secret-key'
-   heroku config:set STRIPE_PUBLIC_KEY='your-public-key'
-   heroku config:set STRIPE_SECRET_KEY='your-secret-key'
-   ```
-4. Push the project to Heroku:
-   ```bash
-   git push heroku main
-   ```
-5. Run database migrations:
-   ```bash
-   heroku run python manage.py migrate
-   ```
-6. Open the deployed app:
-   ```bash
-   heroku open
-   ```
+## **Features in Detail**
+- Guest vs. Authenticated User Features
+- Admin Dashboard Features
+- Payment Processing Flow
+- Order Management System
+
+## **Security & Data Protection**
+- Handling Sensitive Information (e.g., Stripe API Keys)
+- Preventing CSRF & XSS Attacks
+- Using Django Security Middleware
+- User Authentication & Password Encryption
+
+## **Performance Optimization**
+- Caching Strategies
+- Minifying CSS/JS Files
+- Database Indexing & Query Optimization
+- Image Compression & Lazy Loading
+
+## **API & External Integrations**
+- Stripe API for Payments
+- Email Service (e.g., SMTP, Mailgun, SendGrid)
+- Google Analytics for Traffic Insights
+
+## **Error Handling & Debugging**
+- Common Issues & Fixes
+- Logging System Setup
+- Debugging Django & JavaScript Issues
+
+## **Future Enhancements**
+- Wishlist & Favorite Products
+- User Reviews & Ratings System
+- Discount & Coupon System
+- Subscription-Based Pricing Model
 
 ---
 
 ## **Credits**
-### **Code Snippets & Libraries**
-- **Bootstrap 5.3** (for responsive UI)
-- **Stripe API** (for payments)
-- **python-decouple** (for environment variables)
-- **django-countries** (for shipping addresses)
-- **django-crispy-forms & crispy-bootstrap5** (for form styling)
 
----
 
-## **License**
-This project is licensed under the MIT License.
 ```
-
+-- Readme.md
+-- Design
+-- Dashboard
+        --- orders
+        --- profiles
+--- Testing
+        --- UnitTesting

@@ -73,8 +73,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'), # This is the directory where Django will look for templates. We need to add this to the TEMPLATES setting in the settings.py file.
-            os.path.join(BASE_DIR, 'templates', 'allauth'), # This is the directory where Django will look for the allauth templates. We need to add this to the TEMPLATES setting in the settings.py file.
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'templates', 'allauth'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -98,6 +98,7 @@ SITE_ID = 1
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
@@ -109,6 +110,14 @@ LOGOUT_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'magazi.wsgi.application'
 
+# Email Backend Configuration
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Default sender email
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -175,6 +184,7 @@ SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 
+STRIPE_WH_SECRET = config("STRIPE_WH_SECRET", default="whsec_test_secret")
 STRIPE_PUBLIC_KEY = config("STRIPE_PUBLIC_KEY")
 STRIPE_SECRET_KEY = config("STRIPE_SECRET_KEY")
 

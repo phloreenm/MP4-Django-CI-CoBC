@@ -34,8 +34,8 @@
         <p>Your cart is empty.</p>
     {% endif %}
 
-    <!-- Checkout Form: note the action and method -->
-    <form id="payment-form" action="{% url 'checkout:checkout' %}" method="POST">
+    <!-- Checkout Form -->
+    <form id="payment-form">
         {% csrf_token %}
         <fieldset>
             <legend>Billing Information</legend>
@@ -63,8 +63,8 @@
 {% endblock %}
 
 {% block postloadjs %}
+
 <script>
-    // Initialize Stripe
     const stripe = Stripe('{{ stripe_public_key }}');
     const elements = stripe.elements();
     const card = elements.create('card');
@@ -75,29 +75,35 @@
     form.addEventListener('submit', async function(event) {
         event.preventDefault();
 
-        // Use Stripe confirmCardPayment to confirm the card details
-        const { error, paymentIntent } = await stripe.confirmCardPayment("{{ client_secret }}", {
-            payment_method: {
-                card: card,
-                billing_details: {
-                    name: document.querySelector('[name="full_name"]').value
-                }
-            }
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+            type: "card",
+            card: card,
         });
 
         if (error) {
-            // Display error and do not submit form
             document.getElementById('card-errors').textContent = error.message;
         } else {
-            // Payment successful. Create a hidden input with the client secret and submit the form.
-            const hiddenInput = document.createElement('input');
-            hiddenInput.setAttribute('type', 'hidden');
-            hiddenInput.setAttribute('name', 'client_secret');
-            // Recreate the same structure so that splitting on '_secret' in the view works:
-            {% comment %} hiddenInput.setAttribute('value', paymentIntent.id + '_secret_' + "{{ secret_suffix }}"); {% endcomment %}
-            hiddenInput.setAttribute('value', "{{ client_secret }}");
-            form.appendChild(hiddenInput);
-            form.submit();
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            const formData = new FormData(form);
+            formData.append('payment_method_id', paymentMethod.id);
+            formData.append('client_secret', "{{ client_secret }}");
+
+            fetch("{% url 'checkout:process_payment' %}", {
+                method: "POST",
+                headers: {                                                                                                                                                                                                                                                                                                                
+                    "X-CSRFToken": csrfToken,
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    document.getElementById('card-errors').textContent = data.error;
+                }
+            })
+            .catch(error => console.error("Fetch error:", error));
         }
     });
 </script>

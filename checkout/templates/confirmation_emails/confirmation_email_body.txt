@@ -1,0 +1,23 @@
+Hello {{ order.full_name }},
+
+Thank you for your order!
+
+Order Number: {{ order.order_number }}
+Order Date: {{ order.date }}
+
+Order Summary:
+{% for item in order.lineitems.all %}
+- {{ item.product.name }} (Qty: {{ item.quantity }}) - £{{ item.product.price }}
+{% endfor %}
+
+Total: £{{ order.grand_total }}
+
+Your order will be delivered to:
+{{ order.street_address1 }}, {{ order.town_or_city }}, {{ order.country }}
+
+If you have any questions, please contact us.
+
+Thank you for shopping with us!
+
+Best regards,  
+Magazi E-Shop Team
