@@ -4,10 +4,10 @@
 {% block content %}
 <div class="container my-5">
   <div class="row">
-    
+    <!-- Billing Form -->
     <div class="col-md-7">
       <h2 class="mb-4">Billing Information</h2>
-      <form id="payment-form">
+      <form id="payment-form" action="{% url 'checkout:checkout' %}" method="POST">
         {% csrf_token %}
         <div class="card p-4 mb-4">
           <fieldset>
@@ -30,10 +30,11 @@
             <div id="card-errors" class="text-danger mt-2" role="alert"></div>
           </fieldset>
         </div>
+        <!-- Hidden input for client_secret will be added by JavaScript -->
         <button type="submit" class="btn btn-success btn-lg w-100">Complete Order</button>
       </form>
     </div>
-    
+    <!-- Order Summary -->
     <div class="col-md-5">
       <h2 class="mb-4">Your Order</h2>
       {% if cart_items %}
@@ -50,7 +51,11 @@
             <tbody>
               {% for item in cart_items %}
               <tr>
-                <td>{{ item.product.name }}</td>
+                <td>
+                  <a href="{% url 'products:product_detail' item.product.id %}">
+                    {{ item.product.name }}
+                  </a>
+                </td>
                 <td>{{ item.quantity }}</td>
                 <td>£{{ item.total }}</td>
               </tr>
@@ -62,7 +67,7 @@
         </div>
       </div>
       {% else %}
-      <p>Your cart is empty.</p>
+        <p>Your cart is empty.</p>
       {% endif %}
     </div>
   </div>
@@ -79,13 +84,9 @@
       base: {
         fontSize: '16px',
         color: '#495057',
-        '::placeholder': {
-          color: '#6c757d',
-        },
+        '::placeholder': { color: '#6c757d' },
       },
-      invalid: {
-        color: '#dc3545',
-      },
+      invalid: { color: '#dc3545' },
     },
   });
   card.mount('#card-element');
@@ -93,6 +94,7 @@
   const form = document.getElementById('payment-form');
   form.addEventListener('submit', async function(event) {
     event.preventDefault();
+    // Create PaymentMethod with Stripe
     const { paymentMethod, error } = await stripe.createPaymentMethod({
       type: "card",
       card: card,
@@ -100,26 +102,20 @@
     if (error) {
       document.getElementById('card-errors').textContent = error.message;
     } else {
-      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-      const formData = new FormData(form);
-      formData.append('payment_method_id', paymentMethod.id);
-      formData.append('client_secret', "{{ client_secret }}");
-      fetch("{% url 'checkout:process_payment' %}", {
-        method: "POST",
-        headers: {
-          "X-CSRFToken": csrfToken,
-        },
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          window.location.href = data.redirect_url;
-        } else {
-          document.getElementById('card-errors').textContent = data.error;
-        }
-      })
-      .catch(error => console.error("Fetch error:", error));
+      // Append hidden inputs for payment_method_id and client_secret before normal form submission
+      const hiddenPM = document.createElement('input');
+      hiddenPM.setAttribute('type', 'hidden');
+      hiddenPM.setAttribute('name', 'payment_method_id');
+      hiddenPM.value = paymentMethod.id;
+      form.appendChild(hiddenPM);
+
+      const hiddenCS = document.createElement('input');
+      hiddenCS.setAttribute('type', 'hidden');
+      hiddenCS.setAttribute('name', 'client_secret');
+      hiddenCS.value = "{{ client_secret }}";
+      form.appendChild(hiddenCS);
+
+      form.submit(); // Submit the form normally
     }
   });
 </script>
