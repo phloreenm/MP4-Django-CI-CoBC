@@ -142,14 +142,12 @@ def process_payment(request):
         return JsonResponse({'success': True, 'redirect_url': reverse('checkout:success')})
     return JsonResponse({'error': 'Invalid request.'}, status=400)
 
-def success(request, order_number=None):
-    """Display the success page."""
-    # Clear the cart after successful payment
+def success(request, order_number):
+    order = get_object_or_404(Order, order_number=order_number)
     if 'cart' in request.session:
         del request.session['cart']
-
     messages.success(request, "Your payment was successful. Thank you for your order!")
-    return render(request, 'checkout/success.html')
+    return render(request, 'checkout/success.html', {'order': order})
 
 
 def cancel(request):
