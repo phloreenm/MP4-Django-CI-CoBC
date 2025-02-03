@@ -108,6 +108,8 @@ def checkout(request):
         'stripe_public_key': stripe_public_key,
         # We pass the full client_secret (so that our JavaScript can use it)
         'client_secret': intent.client_secret,
+        'cart_items': current_cart.get('cart_items'),  # or current_cart['cart_items'] if key present ?
+        'total_cost': current_cart.get('cart_total'),
     }
     return render(request, 'checkout/checkout.html', context)
 

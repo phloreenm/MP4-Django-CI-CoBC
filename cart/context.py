@@ -3,8 +3,15 @@ from products.models import Product
 
 def cart_summary(request):
     cart = request.session.get('cart', {})
-    total = sum(
-        get_object_or_404(Product, pk=item_id).price * quantity
-        for item_id, quantity in cart.items()
-    )
-    return {'cart_total': total}
+    cart_items = []
+    total = 0
+    for item_id, quantity in cart.items():
+        product = get_object_or_404(Product, pk=item_id)
+        item_total = product.price * quantity
+        total += item_total
+        cart_items.append({
+            'product': product,
+            'quantity': quantity,
+            'total': item_total,
+        })
+    return {'cart_total': total, 'cart_items': cart_items}
