@@ -1,13 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container my-4">
-    <h1>Payment Canceled</h1>
-    <p>Your payment was canceled. If you wish to proceed, you can return to your cart or retry checkout.</p>
-
+<div class="container my-5">
+  <div class="card p-4">
+    <h2 class="text-danger mb-4">Payment Canceled</h2>
+    <p>Your payment was canceled, and your order has not been processed.</p>
+    <p>If you wish to try again, please review your order in the cart or return to checkout to attempt the payment once more.</p>
+    <hr>
     <div class="mt-4">
-        <a href="{% url 'cart:view_cart' %}" class="btn btn-secondary">Return to Cart</a>
-        <a href="{% url 'checkout:checkout' %}" class="btn btn-primary">Retry Checkout</a>
+      <a href="{% url 'cart:view_cart' %}" class="btn btn-secondary">Return to Cart</a>
+      <a href="{% url 'checkout:checkout' %}" class="btn btn-primary">Retry Checkout</a>
     </div>
+  </div>
 </div>
 {% endblock %}

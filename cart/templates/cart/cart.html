@@ -17,7 +17,8 @@
         <tbody>
             {% for item in cart_items %}
             <tr>
-                <td>{{ item.product.name }}</td>
+                <td><a href="{% url 'products:product_detail' item.product.id %}">
+                    {{ item.product.name }}</td>
                 <td>£{{ item.product.price }}</td>
                 <td>
                     <form method="post" action="{% url 'cart:update_quantity' item.product.id %}">
