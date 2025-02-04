@@ -129,12 +129,14 @@
                                 Products
                             </a>
                         </li>
-                        <li>
-                            <a href="/customers/" class="{% if request.path == '/customers/' %}text-secondary{% else %}text-white{% endif %} nav-link">
-                                <i class="bi bi-people d-block mx-auto mb-1"></i>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a href="{% url 'profiles:my_profile' %}" class="nav-link {% if request.path|slice:"0:13" == '/profiles/my' %}text-secondary{% else %}text-white{% endif %}">
+                                <i class="bi bi-person-circle d-block mx-auto mb-1"></i>
                                 My Account
-                            </a>
-                        </li>
+                                </a>
+                            </li>
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'cart:view_cart' %}">
                                 <i class="fas fa-shopping-cart"></i>
