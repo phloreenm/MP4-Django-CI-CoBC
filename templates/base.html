@@ -1,4 +1,5 @@
 {% load static %}
+{% load group_filters %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -75,17 +76,32 @@
                                 Home
                             </a>
                         </li>
-                        <li>
+                        {% comment %} <li>
                             <a href="/dashboard/" class="{% if request.path == '/dashboard/' %}text-secondary{% else %}text-white{% endif %} nav-link">
                                 <i class="bi bi-speedometer2 d-block mx-auto mb-1"></i>
                                 Dashboard
                             </a>
-                        </li>
-                        <li>
-                            <a href="/orders/" class="{% if request.path == '/orders/' %}text-secondary{% else %}text-white{% endif %} nav-link">
-                                <i class="bi bi-table d-block mx-auto mb-1"></i>
-                                Orders
-                            </a>
+                        </li> {% endcomment %}
+                        <li class="nav-item">
+                            {% if user.is_authenticated %}
+                                {% if user.is_staff or user|in_group:"seller" %}
+                                    <a href="{% url 'orders:orders_summary' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
+                                        <i class="bi bi-table d-block mx-auto mb-1"></i>
+                                        Orders
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'orders:my_orders' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
+                                        <i class="bi bi-table d-block mx-auto mb-1"></i>
+                                        Orders
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                <!-- For unauthenticated users, send them to the lookup page -->
+                                <a href="{% url 'orders:order_lookup' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
+                                    <i class="bi bi-table d-block mx-auto mb-1"></i>
+                                    Orders
+                                </a>
+                            {% endif %}
                         </li>
                         <li>
                             <a href="/products/" class="{% if request.path == '/products/' %}text-secondary{% else %}text-white{% endif %} nav-link">
@@ -96,7 +112,7 @@
                         <li>
                             <a href="/customers/" class="{% if request.path == '/customers/' %}text-secondary{% else %}text-white{% endif %} nav-link">
                                 <i class="bi bi-people d-block mx-auto mb-1"></i>
-                                Customers
+                                My Account
                             </a>
                         </li>
                         <li class="nav-item">

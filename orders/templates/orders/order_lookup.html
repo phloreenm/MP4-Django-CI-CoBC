@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container my-4">
+  <h1>Order Lookup</h1>
+  <p>If you are not registered, you can find your order by entering your order number and email.</p>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-primary">Lookup Order</button>
+  </form>
+</div>
+{% endblock %}
