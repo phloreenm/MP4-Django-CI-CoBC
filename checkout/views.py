@@ -2,7 +2,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib import messages
 from .forms import OrderForm
-from .models import Order, OrderLineItem
+from orders.models import Order, OrderLineItem
 from products.models import Product
 from cart.context import cart_summary
 import stripe
@@ -36,6 +36,9 @@ def checkout(request):
         order_form = OrderForm(form_data)
         if order_form.is_valid():
             order = order_form.save(commit=False)
+            # if the user is authenticated, assign the order to the user
+            if request.user.is_authenticated:
+                order.user = request.user
             # Extract PaymentIntent ID from client_secret sent via hidden input
             pid = request.POST.get('client_secret', '').split('_secret')[0]
             order.stripe_pid = pid
