@@ -33,13 +33,14 @@
           <td>
             <a href="{% url 'orders:order_detail' order.order_number %}" class="btn btn-sm btn-info">View</a>
             {% if role == 'admin_or_seller' %}
-              <!-- For Admins/Sellers, show Edit/Delete controls -->
               <a href="{% url 'orders:order_edit' order.order_number %}" class="btn btn-sm btn-primary">Edit</a>
               <a href="{% url 'orders:order_delete' order.order_number %}" class="btn btn-sm btn-danger">Delete</a>
-            {% elif role == 'client' %}
-              <!-- For regular users, if the order is pending, allow cancel/alter request -->
               {% if order.status == "pending" %}
-                <a href="{% url 'orders:order_cancel' order.order_number %}" class="btn btn-sm btn-warning">Cancel</a>
+                <a href="{% url 'orders:confirm_order' order.order_number %}" class="btn btn-sm btn-success">Confirm</a>
+              {% endif %}
+            {% elif role == 'client' %}
+              {% if order.status == "pending" %}
+                <a href="{% url 'orders:cancel_order' order.order_number %}" class="btn btn-sm btn-warning">Cancel</a>
                 <a href="{% url 'orders:order_alter' order.order_number %}" class="btn btn-sm btn-secondary">Alter</a>
               {% endif %}
             {% endif %}
