@@ -10,3 +10,7 @@ class OrderForm(forms.ModelForm):
             'town_or_city', 'postcode', 'country',
             'county', 'comments'
         ]
+
+class OrderLookupForm(forms.Form):
+    order_number = forms.CharField(max_length=32, label="Order Number")
+    email = forms.EmailField(label="Email")
