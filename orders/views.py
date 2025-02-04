@@ -88,7 +88,8 @@ def order_alter(request, order_number):
 
 def order_lookup(request):
     """
-    Allow an unauthenticated user to look up an order by providing order number and email.
+    Allow an unauthenticated user to look up an order by providing the order number and email.
+    If the order is found but has been canceled, display an error message.
     """
     if request.method == 'POST':
         form = OrderLookupForm(request.POST)
@@ -97,9 +98,16 @@ def order_lookup(request):
             email = form.cleaned_data['email']
             try:
                 order = Order.objects.get(order_number=order_number, email=email)
+                # Check if the order is canceled (you may check for multiple variants)
+                if order.status.lower() in ['canceled', 'anulata']:
+                    messages.error(request, "This order has been canceled and is no longer active.")
+                    return render(request, 'orders/order_lookup.html', {'form': form})
+                # Otherwise, display order details
                 return render(request, 'orders/order_detail.html', {'order': order})
             except Order.DoesNotExist:
-                messages.error(request, "No order found matching those details.")
+                messages.error(request, "No order found matching those details. Please check your inputs.")
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
         form = OrderLookupForm()
     return render(request, 'orders/order_lookup.html', {'form': form})
