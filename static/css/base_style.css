@@ -13,6 +13,29 @@ main {
     flex: 1;
 }
 
+/* Custom alerts for Django messages */
+.custom-alert {
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 0.5rem;
+}
+.alert-danger.custom-alert {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+.alert-success.custom-alert {
+    background-color: #d4edda;
+    color: #155724;
+}
+.alert-warning.custom-alert {
+    background-color: #fff3cd;
+    color: #856404;
+}
+.alert-info.custom-alert {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
 /* FOOTER section */
 footer {
     margin-top: auto;

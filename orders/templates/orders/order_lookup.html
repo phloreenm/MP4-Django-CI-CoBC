@@ -3,11 +3,27 @@
 {% block content %}
 <div class="container my-4">
     {% if messages %}
-        <div class="container my-2">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-            {% endfor %}
-        </div>
+    <div class="container my-2">
+        {% for message in messages %}
+            {% if message.tags == "error" %}
+                <div class="alert alert-danger custom-alert">
+                {{ message }}
+                </div>
+            {% elif message.tags == "success" %}
+                <div class="alert alert-success custom-alert">
+                {{ message }}
+                </div>
+            {% elif message.tags == "warning" %}
+                <div class="alert alert-warning custom-alert">
+                {{ message }}
+                </div>
+            {% else %}
+                <div class="alert alert-info custom-alert">
+                {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
     {% endif %}
 </div>
 <div class="container my-4">
