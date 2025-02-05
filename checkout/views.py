@@ -14,13 +14,11 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 def checkout(request):
     """Render the checkout page and process the order form."""
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
-
     if request.method == 'POST':
         cart = request.session.get('cart', {})
         if not cart:
             messages.error(request, "There's nothing in your cart at the moment.")
             return redirect(reverse('products'))
-
         # Build form data from POST
         form_data = {
             'full_name': request.POST.get('full_name'),
@@ -44,7 +42,6 @@ def checkout(request):
             order.stripe_pid = pid
             order.original_cart = json.dumps(cart)
             order.save()
-
             # Add line items to the order.
             for item_id, item_data in cart.items():
                 try:
@@ -82,7 +79,6 @@ def checkout(request):
         if not cart:
             messages.error(request, "There's nothing in your cart at the moment.")
             return redirect(reverse('products'))
-
         current_cart = cart_summary(request)
         total = current_cart['cart_total']
         stripe_total = round(total * 100)
@@ -90,7 +86,6 @@ def checkout(request):
             amount=stripe_total,
             currency=settings.STRIPE_CURRENCY,
         )
-
         # If the user is logged in, prepopulate the form with profile data.
         if request.user.is_authenticated:
             profile = getattr(request.user, 'profile', None)
@@ -103,7 +98,7 @@ def checkout(request):
                     'postcode': profile.postcode or '',
                     'town_or_city': profile.city or '',
                     'street_address1': profile.street_address or '',
-                    'street_address2': '',  # If you have a second address field, include it here.
+                    'street_address2': '',
                     'county': profile.county or '',
                 }
             else:

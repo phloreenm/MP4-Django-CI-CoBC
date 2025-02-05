@@ -6,7 +6,19 @@
   <p><strong>Username:</strong> {{ request.user.username }}</p>
   <p><strong>Email:</strong> {{ request.user.email }}</p>
   <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
-  <p><strong>Address:</strong> {{ profile.street_address }}, {{ profile.city }}, {{ profile.postcode }}, {{ profile.country }}</p>
+  <p><strong>Address:</strong> {{ profile.formatted_address }}</p>
+  {% comment %} <p><strong>Address:</strong>
+    {% if profile.street_address %}{{ profile.street_address }}{% endif %}
+    {% if profile.city %}
+        {% if profile.street_address %}, {% endif %}{{ profile.city }}
+    {% endif %}
+    {% if profile.postcode %}
+        {% if profile.street_address or profile.city %}, {% endif %}{{ profile.postcode }}
+    {% endif %}
+    {% if profile.country %}
+        {% if profile.street_address or profile.city or profile.postcode %}, {% endif %}{{ profile.country }}
+    {% endif %}
+</p> {% endcomment %}
   <p><strong>County:</strong> {{ profile.county }}</p>
   <p><strong>Date of Birth:</strong> {{ profile.date_of_birth }}</p>
   <p><strong>Bio:</strong> {{ profile.bio }}</p>

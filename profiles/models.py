@@ -18,3 +18,14 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"Profile of {self.user.username}"
+
+    @property
+    def formatted_address(self):
+        parts = [
+            self.street_address,
+            self.city,
+            self.postcode,
+            self.country.code if self.country else ''
+        ]
+        # Filter out empty parts and join with comma
+        return ", ".join([part for part in parts if part])
