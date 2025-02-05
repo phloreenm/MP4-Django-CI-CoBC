@@ -44,24 +44,23 @@ def checkout(request):
             order.original_cart = json.dumps(cart)
             order.save()
 
-            # Process each cart item: check stock, create order line items, and update stock.
+            # Process each cart item: check stock, create order line items, update stock.
             for item_id, item_data in cart.items():
                 try:
                     product = Product.objects.get(id=item_id)
-                    
                     # Determine the quantity being purchased.
                     if isinstance(item_data, int):
                         quantity = item_data
                     else:
                         quantity = sum(item_data.get('items_by_size', {}).values())
                     
-                    # Check that there is enough stock
+                    # Check that there is enough stock.
                     if product.stock < quantity:
                         messages.error(request, f"Not enough stock for {product.name}. Available: {product.stock}")
-                        order.delete()  # Remove the order since it cannot be completed
+                        order.delete()
                         return redirect(reverse('cart:view_cart'))
                     
-                    # Create the OrderLineItem(s)
+                    # Create the OrderLineItem(s).
                     if isinstance(item_data, int):
                         OrderLineItem.objects.create(
                             order=order,
@@ -89,6 +88,13 @@ def checkout(request):
                     order.delete()
                     return redirect(reverse('cart:view_cart'))
 
+            # Calculate the order total from the line items.
+            total = sum(item.lineitem_total for item in order.lineitems.all())
+            order.order_total = total
+            # Assume grand_total includes delivery cost.
+            order.grand_total = total + order.delivery_cost
+            order.save()
+
             request.session['save_info'] = 'save-info' in request.POST
             # Redirect to success page with order_number as argument.
             return redirect(reverse('checkout:success', args=[order.order_number]))
@@ -107,7 +113,7 @@ def checkout(request):
             amount=stripe_total,
             currency=settings.STRIPE_CURRENCY,
         )
-        # If the user is logged in, prepopulate the form with profile data.
+        # Prepopulate the form if user is logged in.
         if request.user.is_authenticated:
             profile = getattr(request.user, 'profile', None)
             if profile:
@@ -150,6 +156,7 @@ def checkout(request):
     }
     return render(request, 'checkout/checkout.html', context)
 
+    
 def success(request, order_number):
     """Display the success page with order details."""
     order = get_object_or_404(Order, order_number=order_number)
