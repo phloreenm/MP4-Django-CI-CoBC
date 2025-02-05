@@ -1,20 +1,44 @@
 {% extends "base.html" %}
-
 {% block content %}
-<div class="container my-5">
-  <div class="card p-4">
-    <h2 class="text-success mb-4">Thank You for Your Order!</h2>
-    <p>Your payment was successful and your order has been processed.</p>
-    <p>A confirmation email with the order details has been sent to <strong>{{ order.email }}</strong>.</p>
-    <hr>
-    <h5>Order Summary</h5>
-    <p>Order Number: <strong>{{ order.order_number }}</strong></p>
-    <p>Order Date: <strong>{{ order.date|date:"F j, Y, g:i a" }}</strong></p>
-    <!-- You can add more order details here if needed -->
+<div class="container my-4">
+    <h1>Thank You for Your Order!</h1>
+    <p>Your payment was successful. Below are the details of your order:</p>
+    <h3>Order Details</h3>
+    <ul>
+        <li><strong>Order Number:</strong> {{ order.order_number }}</li>
+        <li><strong>Date:</strong> {{ order.date|date:"F j, Y, g:i a" }}</li>
+        <li><strong>Status:</strong> {{ order.status }}</li>
+        <li><strong>Grand Total:</strong> £{{ order.grand_total }}</li>
+        <li><strong>Comments:</strong> {{ order.comments }}</li>
+    </ul>
+    <h3>Items</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Line Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.lineitems.all %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>£{{ item.lineitem_total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if order.status|lower in "approved,delivered" %}
     <div class="mt-4">
-      <a href="{% url 'products:product_list' %}" class="btn btn-primary">Continue Shopping</a>
-      <a href="{% url 'home:home' %}" class="btn btn-outline-secondary">Return Home</a>
+        <a href="{% url 'orders:download_product' order.order_number %}" class="btn btn-success">
+            Download Your Digital Product
+        </a>
     </div>
-  </div>
+    {% endif %}
+    <div class="mt-4">
+        <a href="{% url 'orders:my_orders' %}" class="btn btn-secondary">Back to My Orders</a>
+    </div>
 </div>
 {% endblock %}
