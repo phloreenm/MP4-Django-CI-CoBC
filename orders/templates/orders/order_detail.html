@@ -27,6 +27,13 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if order.status|lower in "approved,delivered" %}
+        <div class="mt-4">
+            <a href="{% url 'orders:download_product' order.order_number %}" class="btn btn-success">
+                Download Your Digital Product
+            </a>
+        </div>
+    {% endif %}
     <div class="mt-4">
         <a href="{% url 'orders:my_orders' %}" class="btn btn-secondary">Back to Orders</a>
     </div>
