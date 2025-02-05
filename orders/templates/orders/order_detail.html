@@ -27,13 +27,17 @@
             {% endfor %}
         </tbody>
     </table>
-    {% if order.status|lower in "approved,delivered" %}
-        <div class="mt-4">
-            <a href="{% url 'orders:download_product' order.order_number %}" class="btn btn-success">
-                Download Your Digital Product
-            </a>
-        </div>
-    {% endif %}
+    {% for item in order.lineitems.all %}
+        {% if item.product and item.product.id %}
+            {% if order.status|lower in "approved delivered" and item.product.digital_file %}
+                <a href="{% url 'orders:download_product' order.order_number item.product.id %}" class="btn btn-success">
+                    Download {{ item.product.name }}
+                </a>
+            {% endif %}
+        {% else %}
+            <p>Download unavailable for {{ item.product.name }}</p>
+        {% endif %}
+    {% endfor %}
     <div class="mt-4">
         <a href="{% url 'orders:my_orders' %}" class="btn btn-secondary">Back to Orders</a>
     </div>
