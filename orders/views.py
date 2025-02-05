@@ -198,27 +198,46 @@ def order_lookup(request):
 #     # Serve the file as an attachment.
 #     return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=os.path.basename(file_path))
 
-@login_required
 def download_product(request, order_number, product_id):
-    # Get the order for the logged-in user
-    order = get_object_or_404(Order, order_number=order_number, user=request.user)
-    # Only allow download if order status is approved or delivered
+    """
+    Serves the digital file for the given product if the order is approved.
+    """
+    # Retrieve the order.
+    order = get_object_or_404(Order, order_number=order_number)
+    # Allow download only if order is approved/delivered.
     if order.status.lower() not in ['approved', 'delivered']:
-        messages.error(request, "Your order is not approved for download yet.")
-        return redirect('orders:order_detail', order_number=order_number)
-    
-    # Ensure the requested product is part of the order
-    if not order.lineitems.filter(product_id=product_id).exists():
-        raise Http404("Product not found in your order.")
-    
-    # Retrieve the product and check that a digital file exists
-    product = get_object_or_404(Product, pk=product_id)
+        raise Http404("This order is not approved for download.")
+    # Retrieve the product.
+    product = get_object_or_404(Product, id=product_id)
+    # Ensure the product has a digital file.
     if not product.digital_file:
         raise Http404("No digital file available for this product.")
+    try:
+        return FileResponse(product.digital_file.open('rb'), content_type='application/pdf')
+    except Exception:
+        raise Http404("Error retrieving the file.")
+
+# @login_required
+# def download_product(request, order_number, product_id):
+#     # Get the order for the logged-in user
+#     order = get_object_or_404(Order, order_number=order_number, user=request.user)
+#     # Only allow download if order status is approved or delivered
+#     if order.status.lower() not in ['approved', 'delivered']:
+#         messages.error(request, "Your order is not approved for download yet.")
+#         return redirect('orders:order_detail', order_number=order_number)
     
-    # Serve the file as an attachment
-    return FileResponse(
-        product.digital_file.open('rb'),
-        as_attachment=True,
-        filename=os.path.basename(product.digital_file.name)
-    )
+#     # Ensure the requested product is part of the order
+#     if not order.lineitems.filter(product_id=product_id).exists():
+#         raise Http404("Product not found in your order.")
+    
+#     # Retrieve the product and check that a digital file exists
+#     product = get_object_or_404(Product, pk=product_id)
+#     if not product.digital_file:
+#         raise Http404("No digital file available for this product.")
+    
+#     # Serve the file as an attachment
+#     return FileResponse(
+#         product.digital_file.open('rb'),
+#         as_attachment=True,
+#         filename=os.path.basename(product.digital_file.name)
+#     )
