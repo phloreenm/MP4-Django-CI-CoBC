@@ -43,7 +43,12 @@
                         </h5>
                         <p class="card-text">{{ product.description|truncatechars:100 }}</p>
                         <p class="card-text text-primary fw-bold">£{{ product.price }}</p>
-                        <a href="{% url 'cart:add_to_cart' product.id %}" class="btn btn-primary">Add to Cart</a>
+                        {% if product.stock > 0 %}
+                            <a href="{% url 'cart:add_to_cart' product.id %}" class="btn btn-primary">Add to Cart</a>
+                        {% else %}
+                            <button class="btn btn-secondary" disabled>Out of Stock</button>
+                        {% endif %}
+                        {% comment %} <a href="{% url 'cart:add_to_cart' product.id %}" class="btn btn-primary">Add to Cart</a> {% endcomment %}
                     </div>
                 </div>
             </div>
