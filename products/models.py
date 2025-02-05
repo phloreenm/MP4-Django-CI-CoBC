@@ -8,7 +8,7 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to='product_images/', null=True, blank=True)
-    stock = models.PositiveIntegerField(default=0)  # Adăugăm stocul
+    stock = models.PositiveIntegerField(default=0)
     digital_file = models.FileField(upload_to='digital_products/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

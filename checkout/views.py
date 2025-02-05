@@ -19,6 +19,7 @@ def checkout(request):
         if not cart:
             messages.error(request, "There's nothing in your cart at the moment.")
             return redirect(reverse('products'))
+
         # Build form data from POST
         form_data = {
             'full_name': request.POST.get('full_name'),
@@ -42,24 +43,44 @@ def checkout(request):
             order.stripe_pid = pid
             order.original_cart = json.dumps(cart)
             order.save()
-            # Add line items to the order.
+
+            # Process each cart item: check stock, create order line items, and update stock.
             for item_id, item_data in cart.items():
                 try:
                     product = Product.objects.get(id=item_id)
+                    
+                    # Determine the quantity being purchased.
+                    if isinstance(item_data, int):
+                        quantity = item_data
+                    else:
+                        quantity = sum(item_data.get('items_by_size', {}).values())
+                    
+                    # Check that there is enough stock
+                    if product.stock < quantity:
+                        messages.error(request, f"Not enough stock for {product.name}. Available: {product.stock}")
+                        order.delete()  # Remove the order since it cannot be completed
+                        return redirect(reverse('cart:view_cart'))
+                    
+                    # Create the OrderLineItem(s)
                     if isinstance(item_data, int):
                         OrderLineItem.objects.create(
                             order=order,
                             product=product,
-                            quantity=item_data,
+                            quantity=quantity,
                         )
                     else:
-                        for size, quantity in item_data.get('items_by_size', {}).items():
+                        for size, qty in item_data.get('items_by_size', {}).items():
                             OrderLineItem.objects.create(
                                 order=order,
                                 product=product,
-                                quantity=quantity,
+                                quantity=qty,
                                 product_size=size,
                             )
+                    
+                    # Deduct the purchased quantity from stock and save the product.
+                    product.stock -= quantity
+                    product.save()
+                    
                 except Product.DoesNotExist:
                     messages.error(request, (
                         "One of the products in your cart wasn't found in our database. "
@@ -137,7 +158,6 @@ def success(request, order_number):
         del request.session['cart']
     messages.success(request, "Your payment was successful. Thank you for your order!")
     return render(request, 'checkout/success.html', {'order': order})
-
 
 def cancel(request):
     """Handle canceled checkouts."""
