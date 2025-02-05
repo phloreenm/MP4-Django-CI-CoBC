@@ -26,15 +26,51 @@ def order_detail(request, order_number):
 
 @login_required
 def cancel_order(request, order_number):
-    """Allow the user to cancel an order if it is still pending."""
+    """Allow the user to cancel an order if it is still pending and restore product stock."""
     order = get_object_or_404(Order, order_number=order_number, user=request.user)
     if order.status not in ['delivered', 'canceled']:
+        # Restore stock for each order line item.
+        for item in order.lineitems.all():
+            product = item.product
+            product.stock += item.quantity
+            product.save()
+        # Update order status.
         order.status = 'canceled'
         order.save()
         messages.success(request, "Your order has been canceled.")
     else:
         messages.error(request, "This order cannot be canceled.")
     return redirect('orders:my_orders')
+
+def cancel_order_lookup(request, order_number):
+    """
+    Allows an unauthenticated (or authenticated) user who has looked up their order
+    to cancel it. The view should confirm the cancellation (optionally, you can require
+    a confirmation step) and restore the stock for each item in the order.
+    """
+    # Here, you might pass along the email via GET parameters or have the user confirm it.
+    email = request.GET.get('email', None)
+    if not email:
+        messages.error(request, "Email verification is required to cancel the order.")
+        return redirect('orders:order_lookup')
+    
+    try:
+        order = Order.objects.get(order_number=order_number, email=email)
+        if order.status.lower() not in ['delivered', 'canceled']:
+            # Restore stock for each order line item.
+            for item in order.lineitems.all():
+                product = item.product
+                product.stock += item.quantity
+                product.save()
+            order.status = 'canceled'
+            order.save()
+            messages.success(request, "Your order has been canceled and the stock has been updated.")
+        else:
+            messages.error(request, "This order cannot be canceled.")
+    except Order.DoesNotExist:
+        messages.error(request, "No order found with the provided details.")
+    return redirect('orders:order_lookup')
+
 
 @login_required
 def orders_summary(request):
@@ -106,8 +142,10 @@ def confirm_order(request, order_number):
 def order_lookup(request):
     """
     Allows an unauthenticated (or authenticated) user to look up an order by its
-    order number and email. If the order is found and active, displays order details.
+    order number and email. If an order is found and active, displays order details
+    along with a cancel option.
     """
+    order = None
     if request.method == 'POST':
         form = OrderLookupForm(request.POST)
         if form.is_valid():
@@ -117,12 +155,12 @@ def order_lookup(request):
                 order = Order.objects.get(order_number=order_number, email=email)
                 if order.status.lower() in ['canceled', 'anulata']:
                     messages.error(request, "This order has been canceled and is no longer active.")
-                    return render(request, 'orders/order_lookup.html', {'form': form})
-                return render(request, 'orders/order_detail.html', {'order': order})
+                    order = None  # Do not show order details
+                # If order exists and is active just display details.
             except Order.DoesNotExist:
                 messages.error(request, "No order found matching those details. Please check your inputs.")
         else:
             messages.error(request, "Please correct the errors below.")
     else:
         form = OrderLookupForm()
-    return render(request, 'orders/order_lookup.html', {'form': form})
+    return render(request, 'orders/order_lookup.html', {'form': form, 'order': order})
