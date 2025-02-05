@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.urls import reverse
 from .models import Order
 from .forms import OrderForm, OrderLookupForm
 
@@ -12,7 +13,11 @@ def my_orders(request):
 
 @login_required
 def order_detail(request, order_number):
-    # Allow admin or seller to view any order; regular users see only their own.
+    """
+    Display details for a specific order.
+    Admins, sellers, or superusers can view any order;
+    regular users can only view their own orders.
+    """
     if request.user.is_staff or request.user.groups.filter(name="seller").exists():
         order = get_object_or_404(Order, order_number=order_number)
     else:
@@ -34,12 +39,12 @@ def cancel_order(request, order_number):
 @login_required
 def orders_summary(request):
     """
-    Displays orders differently based on the user role:
-      - Admin (request.user.is_staff) or Seller (user in group 'seller'): sees all orders.
-      - Regular user: sees only their own orders.
+    Displays orders based on the user's role:
+      - Admins, sellers, or superusers see all orders.
+      - Regular users see only their own orders.
     """
     user = request.user
-    if user.is_staff or user.groups.filter(name='seller').exists():
+    if user.is_staff or user.groups.filter(name="seller").exists():
         orders = Order.objects.all().order_by('-date')
         role = 'admin_or_seller'
     else:
@@ -54,7 +59,7 @@ def orders_summary(request):
 @login_required
 def order_edit(request, order_number):
     order = get_object_or_404(Order, order_number=order_number)
-    if not (request.user.is_staff or request.user.groups.filter(name='seller').exists()):
+    if not (request.user.is_staff or request.user.groups.filter(name="seller").exists()):
         messages.error(request, "You do not have permission to edit orders.")
         return redirect('orders:orders_summary')
     messages.info(request, "Edit order functionality is not implemented yet.")
@@ -63,7 +68,7 @@ def order_edit(request, order_number):
 @login_required
 def order_delete(request, order_number):
     order = get_object_or_404(Order, order_number=order_number)
-    if not (request.user.is_staff or request.user.groups.filter(name='seller').exists()):
+    if not (request.user.is_staff or request.user.groups.filter(name="seller").exists()):
         messages.error(request, "You do not have permission to delete orders.")
         return redirect('orders:orders_summary')
     order.delete()
@@ -83,19 +88,16 @@ def order_alter(request, order_number):
 def confirm_order(request, order_number):
     """
     Allows an admin or seller to confirm (approve) an order.
-    Once confirmed, the order status is updated, and an email (to be implemented)
-    could be sent with download links.
+    Once confirmed, the order status is updated (to 'approved'),
+    and an email notification (to be implemented) could be sent.
     """
-    # Only allow admin or seller to confirm orders
     if not (request.user.is_staff or request.user.groups.filter(name="seller").exists()):
         messages.error(request, "You do not have permission to confirm orders.")
         return redirect('orders:orders_summary')
-
     order = get_object_or_404(Order, order_number=order_number)
     if order.status.lower() == 'pending':
-        order.status = 'approved'  # or 'delivered' if that is your final status
+        order.status = 'approved'
         order.save()
-        # Optionally, trigger an email to the customer here with download links
         messages.success(request, f"Order {order.order_number} has been confirmed.")
     else:
         messages.error(request, "Only pending orders can be confirmed.")
@@ -103,8 +105,8 @@ def confirm_order(request, order_number):
 
 def order_lookup(request):
     """
-    Allows an unauthenticated user to look up an order by order number and email.
-    If an order is found but is canceled, an error message is shown.
+    Allows an unauthenticated (or authenticated) user to look up an order by its
+    order number and email. If the order is found and active, displays order details.
     """
     if request.method == 'POST':
         form = OrderLookupForm(request.POST)
