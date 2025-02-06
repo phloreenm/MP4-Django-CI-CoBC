@@ -31,6 +31,7 @@ def checkout(request):
             'street_address1': request.POST.get('street_address1'),
             'street_address2': request.POST.get('street_address2'),
             'county': request.POST.get('county'),
+            'comments': request.POST.get('comments'),
         }
         order_form = OrderForm(form_data)
         if order_form.is_valid():
@@ -98,7 +99,7 @@ def checkout(request):
             order.save()
 
             request.session['save_info'] = 'save-info' in request.POST
-            
+
             send_order_confirmation_email(order)
             # Redirect to success page with order_number as argument.
             return redirect(reverse('checkout:success', args=[order.order_number]))
@@ -131,11 +132,13 @@ def checkout(request):
                     'street_address1': profile.street_address or '',
                     'street_address2': '',
                     'county': profile.county or '',
+                    'comments': '',
                 }
             else:
                 default_data = {
                     'full_name': request.user.get_full_name() or request.user.username,
                     'email': request.user.email,
+                    'comments': '',
                 }
         else:
             default_data = {
@@ -148,6 +151,7 @@ def checkout(request):
                 'street_address1': '67 Fisherton Street',
                 'street_address2': 'CC CAFE',
                 'county': 'Wiltshire',
+                'comments': 'This is just a comment meant for testing purposes.',
             }
         order_form = OrderForm(initial=default_data)
 
