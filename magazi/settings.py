@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 from decouple import config
-import os
+import os, certifi
+
+#For developement purposes only;  Remove the certifi import and the lone below before deploying to production
+os.environ['SSL_CERT_FILE'] = certifi.where() # This line sets the SSL_CERT_FILE environment variable to the path of the certifi file. This is required to use the requests library to make HTTPS requests.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -111,6 +114,16 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'magazi.wsgi.application'
+
+# Email Backend Configuration
+EMAIL_USE_TLS = False # For test environment only; set to True if using a secure connection
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 # Database

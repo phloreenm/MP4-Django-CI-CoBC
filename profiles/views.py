@@ -26,24 +26,6 @@ def my_profile(request):
                     }
     downloads = list(downloads_dict.values())
     return render(request, 'profiles/my_profile.html', {'profile': profile, 'downloads': downloads})
-    
-# @login_required
-# def my_profile(request):
-#     profile = request.user.profile
-
-#     # Get orders for the user that are approved (or delivered)
-#     orders = Order.objects.filter(user=request.user, status__iexact='approved')
-#     # Gather all unique products from these orders that have a digital file available
-#     downloads = Product.objects.filter(
-#         orderlineitem__order__in=orders,
-#         digital_file__isnull=False
-#     ).distinct()
-
-#     context = {
-#         'profile': profile,
-#         'downloads': downloads,
-#     }
-#     return render(request, 'profiles/my_profile.html', context)
 
 @login_required
 def edit_profile(request):

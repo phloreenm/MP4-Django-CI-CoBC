@@ -87,6 +87,8 @@ def checkout(request):
                     ))
                     order.delete()
                     return redirect(reverse('cart:view_cart'))
+            
+            from orders.emails import send_order_confirmation_email
 
             # Calculate the order total from the line items.
             total = sum(item.lineitem_total for item in order.lineitems.all())
@@ -96,6 +98,8 @@ def checkout(request):
             order.save()
 
             request.session['save_info'] = 'save-info' in request.POST
+            
+            send_order_confirmation_email(order)
             # Redirect to success page with order_number as argument.
             return redirect(reverse('checkout:success', args=[order.order_number]))
         else:
@@ -156,7 +160,7 @@ def checkout(request):
     }
     return render(request, 'checkout/checkout.html', context)
 
-    
+
 def success(request, order_number):
     """Display the success page with order details."""
     order = get_object_or_404(Order, order_number=order_number)

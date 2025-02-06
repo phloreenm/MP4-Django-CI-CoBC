@@ -241,6 +241,11 @@ In the Orders module (both in the admin panel and on the order detail page), the
 	•	Status:
 This is a known issue that will be addressed in a future update by ensuring the order totals are calculated and saved correctly when line items are added.
 
+	•	Issue:
+After a succesfull/failed order, there is a script to send a confirmation email. 
+	•	Status:
+I eventually sorted it with a solution I found here: https://stackoverflow.com/questions/75269008/getting-ssl-error-when-sending-email-via-django
+
 Profiles Module
 
 Profile Model
