@@ -7,7 +7,7 @@ from .forms import OrderForm, OrderLookupForm
 import os
 from django.http import FileResponse, Http404
 from products.models import Product
-from orders.emails import send_order_approval_email
+from orders.emails import send_order_approval_email, send_order_cancellation_email
 
 @login_required
 def my_orders(request):

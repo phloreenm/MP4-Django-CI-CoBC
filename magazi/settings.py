@@ -117,6 +117,7 @@ WSGI_APPLICATION = 'magazi.wsgi.application'
 
 # Email Backend Configuration
 EMAIL_USE_TLS = False # For test environment only; set to True if using a secure connection
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
