@@ -1,1 +1,17 @@
-Thank you for your order, {{ order.full_name }}. Your order number is {{ order.order_number }}...
+Dear {{ order.full_name }},
+
+Thank you for your order [{{ order.order_number }}] placed on {{ order.date|date:"F j, Y, g:i a" }}.
+
+Order Summary:
+{% for item in order.lineitems.all %}
+• {{ item.product.name }} – Quantity: {{ item.quantity }} – Line Total: £{{ item.lineitem_total }}
+{% endfor %}
+
+Grand Total: £{{ order.grand_total }}
+
+We are currently processing your order. You will receive a further notification once your order is confirmed by our seller.
+
+Thank you for shopping with us!
+
+Best regards,
+The Magazi Team

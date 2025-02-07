@@ -1,1 +1,1 @@
-order_approval_subject
+Your order [{{ order.order_number }}] has been confirmed!
