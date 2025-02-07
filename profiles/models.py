@@ -29,3 +29,11 @@ class Profile(models.Model):
         ]
         # Filter out empty parts and join with comma
         return ", ".join([part for part in parts if part])
+
+    def get_role(self):
+        if self.user.is_staff:
+            return "Admin"
+        elif self.user.groups.filter(name="seller").exists():
+            return "Seller"
+        else:
+            return "Client"

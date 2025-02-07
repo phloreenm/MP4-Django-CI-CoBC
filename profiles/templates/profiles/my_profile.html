@@ -2,7 +2,8 @@
 {% load static %}
 {% block content %}
 <div class="container my-4">
-  <h1>My Profile</h1>
+  <h1>{{ request.user.profile.get_role }} Profile</h1>
+  {% comment %} <p><strong>Role:</strong> {{ request.user.profile.get_role }}</p> {% endcomment %}
   <p><strong>Username:</strong> {{ request.user.username }}</p>
   <p><strong>Email:</strong> {{ request.user.email }}</p>
   <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>

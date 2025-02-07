@@ -1,1 +1,10 @@
-order_cancellation_body
+Dear {{ order.full_name }},
+
+Your order [{{ order.order_number }}] placed on {{ order.date|date:"F j, Y, g:i a" }} has been canceled as per your request.
+
+If you cancelled this order is an error or if you have any questions, please contact our support team.
+
+Thank you for your understanding.
+
+Sincerely,
+The Magazi Team

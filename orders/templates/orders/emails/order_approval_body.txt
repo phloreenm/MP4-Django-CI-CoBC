@@ -1,1 +1,14 @@
-order_approval_body
+Dear {{ order.full_name }},
+
+Good news! Your order [{{ order.order_number }}] has been approved and is now ready for download.
+
+To access your digital product(s), please log in to your account and visit the "My Downloads" section or use the link below:
+
+[Download Link]
+
+If you have any questions or need assistance, please contact our support team.
+
+Thank you for choosing MP4 Full Stack E-Shop.
+
+Best regards,
+The Magazi Team
