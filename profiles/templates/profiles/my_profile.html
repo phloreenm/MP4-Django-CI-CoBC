@@ -2,21 +2,23 @@
 {% load static %}
 {% block content %}
 <div class="container my-4">
-  <h1>{{ request.user.profile.get_role }} Profile</h1>
-  {% comment %} <p><strong>Role:</strong> {{ request.user.profile.get_role }}</p> {% endcomment %}
-  <p><strong>Username:</strong> {{ request.user.username }}</p>
-  <p><strong>Email:</strong> {{ request.user.email }}</p>
-  <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
-  <p><strong>Address:</strong> {{ profile.street_address }}, {{ profile.city }}, {{ profile.postcode }}, {{ profile.country }}</p>
-  <p><strong>County:</strong> {{ profile.county }}</p>
-  <p><strong>Date of Birth:</strong> {{ profile.date_of_birth }}</p>
-  <p><strong>Bio:</strong> {{ profile.bio }}</p>
-  {% if profile.profile_picture %}
-    <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" style="max-width: 200px;">
-  {% endif %}
-  <div class="mt-4">
-    <a href="{% url 'profiles:edit_profile' %}" class="btn btn-primary">Edit Profile</a>
-  </div>
+    <!-- My Profile Section -->
+    <h1>{{ request.user.profile.get_role }} Profile</h1>
+    <p><strong>Username:</strong> {{ request.user.username }}</p>
+    <p><strong>Email:</strong> {{ request.user.email }}</p>
+    <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
+    <p><strong>Address:</strong> {{ profile.street_address }}, {{ profile.city }}, {{ profile.postcode }}, {{ profile.country }}</p>
+    <p><strong>County:</strong> {{ profile.county }}</p>
+    <p><strong>Date of Birth:</strong> {{ profile.date_of_birth }}</p>
+    {% if profile.bio %}
+        <p><strong>Bio:</strong> {{ profile.bio }}</p>
+    {% endif %}
+    {% if profile.profile_picture %}
+        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" style="max-width: 200px;">
+    {% endif %}
+    <div class="mt-4">
+        <a href="{% url 'profiles:edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+    </div>
 
   <!-- My Downloads Section -->
   <div class="mt-5">
