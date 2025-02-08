@@ -15,7 +15,8 @@ from decouple import config
 import os, certifi
 
 #For developement purposes only;  Remove the certifi import and the lone below before deploying to production
-os.environ['SSL_CERT_FILE'] = certifi.where() # This line sets the SSL_CERT_FILE environment variable to the path of the certifi file. This is required to use the requests library to make HTTPS requests.
+if config('ENVIRONMENT', default='development') == 'development':
+    os.environ['SSL_CERT_FILE'] = certifi.where() # This line sets the SSL_CERT_FILE environment variable to the path of the certifi file. This is required to use the requests library to make HTTPS requests.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,12 +26,26 @@ ACCOUNT_ADAPTER = 'accounts.adapter.MyAccountAdapter'
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-rb0x0$b^qn#tywifv3m7ishekodm5&gewejt3%j3&+!i!&al5o'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+# Determine the environment from the ENVIRONMENT variable.
+ENVIRONMENT = config('ENVIRONMENT', default='development')
+
+if ENVIRONMENT == 'production':
+    DEBUG = False # SECURITY WARNING: don't run with debug turned on in production!
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY')
+    STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
+    STRIPE_WH_SECRET = os.environ.get('STRIPE_WH_SECRET')
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+else:
+    DEBUG = config('DEBUG', default=True, cast=bool)
+    SECRET_KEY = config('SECRET_KEY', default='your-local-secret-key')
+    STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
+    STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+    STRIPE_WH_SECRET = config('STRIPE_WH_SECRET', default="whsec_test_secret")
+    ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+
 
 
 # Application definition
@@ -102,8 +117,8 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
+# Email Backend Operations Configuration - AllAuth Account Management
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #email backend for development
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
@@ -115,9 +130,9 @@ LOGOUT_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'magazi.wsgi.application'
 
-# Email Backend Configuration
-EMAIL_USE_TLS = False # For test environment only; set to True if using a secure connection
-
+# Gmail Backend Configuration
+if config('ENVIRONMENT', default='development') == 'development':
+    EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", default=True)
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
@@ -161,45 +176,36 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-
 STATIC_URL = '/static/'
-
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Session Configuration
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-
 SESSION_COOKIE_AGE = 1209600  # 2 weeks
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-
+# Stripe Configuration
 STRIPE_WH_SECRET = config("STRIPE_WH_SECRET", default="whsec_test_secret")
 print("STRIPE_WH_SECRET =", STRIPE_WH_SECRET)
 STRIPE_PUBLIC_KEY = config("STRIPE_PUBLIC_KEY")
 STRIPE_SECRET_KEY = config("STRIPE_SECRET_KEY")
-
 STRIPE_CURRENCY = "gbp"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'

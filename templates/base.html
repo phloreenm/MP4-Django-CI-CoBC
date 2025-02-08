@@ -193,7 +193,29 @@
             </div>
         </div>
     </footer>
-
+    <!-- Cart Notification Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" style="position: fixed; top: 20px; left: 20px;">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="cartModalLabel">Cart Updated</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <p>Your cart total: <strong id="cartTotalDisplay">$0.00</strong></p>
+            </div>
+            <div class="modal-footer">
+            <a href="{% url 'products:product_list' %}" class="btn btn-secondary">Continue Shopping</a>
+            <a href="{% url 'cart:view_cart' %}" class="btn btn-primary">Checkout</a>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+    <!-- Optional: A separate div for other notifications -->
+    <div id="cart-notification" style="display: none;">
+        <div class="cart-summary"></div>
+    </div>
     {% block postloadjs %}
     {% endblock %}
   </body>
