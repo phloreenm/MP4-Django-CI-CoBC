@@ -13,3 +13,5 @@ stripe==11.4.1
 typing_extensions==4.12.2
 urllib3==2.3.0
 python-decouple==3.8
+crispy-bootstrap5==2024.10
+django-crispy-forms==2.3
