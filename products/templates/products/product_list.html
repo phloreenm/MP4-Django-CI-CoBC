@@ -24,10 +24,11 @@
     </div>
 
     <!-- Product Container -->
-    <div id="product-container" class="row row-cols-1 row-cols-md-2 g-4">
+    {% comment %} <div id="product-container" class="row row-cols-1 row-cols-md-2 g-4"> {% endcomment %}
+        <div id="product-container" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         {% for product in products %}
             <div class="col">
-                <div class="card h-100 shadow-sm">
+                <div class="card h-100 shadow-sm  product-card">
                     {% if product.image %}
                         <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
                     {% else %}
