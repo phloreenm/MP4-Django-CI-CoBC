@@ -4,51 +4,51 @@
 <html lang="en">
   <head>
     {% block meta %}
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {% endblock %}
-    {% block extra_meta %}
-    {% endblock %}
+    {% block extra_meta %}{% endblock %}
 
     {% block corecss %}
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <link href="{% static 'css/base_style.css' %}" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+      <link href="{% static 'css/base_style.css' %}" rel="stylesheet">
     {% endblock %}
-    {% block extracss %}
-    {% endblock %}
-
+    {% block extracss %}{% endblock %}
 
     {% block corejs %}
-        <!-- JS (Bundle inclusiv Popper.js) -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                // Timpul la momentul încărcării paginii
-                const pageLoadTimeElement = document.getElementById('page-load-time-display');
-                const now = new Date();
-                const pageLoadTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                pageLoadTimeElement.textContent = pageLoadTime;
+      <!-- JS (Bundle inclusiv Popper.js) -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          // Timpul la momentul încărcării paginii
+          const pageLoadTimeElement = document.getElementById('page-load-time-display');
+          const now = new Date();
+          const pageLoadTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          pageLoadTimeElement.textContent = pageLoadTime;
 
-                // Timpul real (actualizat la fiecare secundă)
-                const realTimeElement = document.getElementById('real-time-display');
-                const updateRealTime = () => {
-                    const currentTime = new Date();
-                    const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                    realTimeElement.textContent = formattedTime;
-                };
-                updateRealTime();
-                setInterval(updateRealTime, 1000); // Actualizare la fiecare secundă
-            });
-        </script>
-        <script src="https://js.stripe.com/v3/"></script>
+          // Timpul real (actualizat la fiecare secundă)
+          const realTimeElement = document.getElementById('real-time-display');
+          const updateRealTime = () => {
+            const currentTime = new Date();
+            const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            realTimeElement.textContent = formattedTime;
+          };
+          updateRealTime();
+          setInterval(updateRealTime, 1000); // Actualizare la fiecare secundă
+        });
+      </script>
+      {% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+              integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+              crossorigin="anonymous"></script> {% endcomment %}
+      <script src="https://js.stripe.com/v3/"></script>
     {% endblock %}
-    {% block extra_js %}
-    {% endblock %}
+    {% block extra_js %}{% endblock %}
 
-    <title>Magazi {% block extra_title %}{% endblock %}</title></title>
-    {% comment %} <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico" /> {% endcomment %}
+    <title>Magazi {% block extra_title %}{% endblock %}</title>
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' fill='%230d6efd' viewBox='0 0 16 16'><path d='M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zm3.91 6.902a.5.5 0 0 0-.708-.706L7.5 9.902 5.8 8.2a.5.5 0 1 0-.7.707l2 2a.5.5 0 0 0 .7 0l4-4z'/></svg>" type="image/svg+xml">
   </head>
@@ -56,169 +56,153 @@
     <header class="container-fluid fixed-top"></header>
 
     {% if messages %}
-        <div class="message-container"></div>
+      <div class="message-container"></div>
     {% endif %}
 
     {% block page_header %}
-      <header>
-          <div class="px-3 py-2 text-bg-dark border-bottom">
-              <div class="container">
-                  <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                      <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-                          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-                          Magazi
-                      </a>
-
-                      <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-                        <li>
-                            <a href="/" class="{% if request.path == '/' %}text-secondary{% else %}text-white{% endif %} nav-link">
-                                <i class="bi bi-house d-block mx-auto mb-1"></i>
-                                Home
-                            </a>
-                        </li>
-                        {% comment %} <li>
-                            <a href="/dashboard/" class="{% if request.path == '/dashboard/' %}text-secondary{% else %}text-white{% endif %} nav-link">
-                                <i class="bi bi-speedometer2 d-block mx-auto mb-1"></i>
-                                Dashboard
-                            </a>
-                        </li> {% endcomment %}
-                        <li class="nav-item">
-                            {% if user.is_authenticated %}
-                              {% if user.is_staff or user|in_group:"seller" %}
-                                <a href="{% url 'orders:orders_summary' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
-                                  <i class="bi bi-table d-block mx-auto mb-1"></i>
-                                  Orders
-                                </a>
-                              {% else %}
-                                <a href="{% url 'orders:my_orders' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
-                                  <i class="bi bi-table d-block mx-auto mb-1"></i>
-                                  Orders
-                                </a>
-                              {% endif %}
-                            {% else %}
-                              <a href="{% url 'orders:order_lookup' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
-                                <i class="bi bi-table d-block mx-auto mb-1"></i>
-                                Orders
-                              </a>
-                            {% endif %}
-                          </li>
-                        {% comment %} <li class="nav-item">
-                            {% if user.is_authenticated %}
-                                {% if user.is_staff or user|in_group:"seller" %}
-                                    <a href="{% url 'orders:orders_summary' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
-                                        <i class="bi bi-table d-block mx-auto mb-1"></i>
-                                        Orders
-                                    </a>
-                                {% else %}
-                                    <a href="{% url 'orders:my_orders' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
-                                        <i class="bi bi-table d-block mx-auto mb-1"></i>
-                                        Orders
-                                    </a>
-                                {% endif %}
-                            {% else %}
-                                <!-- For unauthenticated users, send them to the lookup page -->
-                                <a href="{% url 'orders:order_lookup' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
-                                    <i class="bi bi-table d-block mx-auto mb-1"></i>
-                                    Orders
-                                </a>
-                            {% endif %}
-                        </li> {% endcomment %}
-                        <li>
-                            <a href="/products/" class="{% if request.path == '/products/' %}text-secondary{% else %}text-white{% endif %} nav-link">
-                                <i class="bi bi-grid d-block mx-auto mb-1"></i>
-                                Products
-                            </a>
-                        </li>
-                        {% if user.is_authenticated %}
-                            <li class="nav-item">
-                                <a href="{% url 'profiles:my_profile' %}" class="nav-link {% if request.path|slice:"0:13" == '/profiles/my' %}text-secondary{% else %}text-white{% endif %}">
-                                <i class="bi bi-person-circle d-block mx-auto mb-1"></i>
-                                My Account
-                                </a>
-                            </li>
-                        {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'cart:view_cart' %}">
-                                <i class="fas fa-shopping-cart"></i>
-                                {% if cart_total %}
-                                    £{{ cart_total }}
-                                {% else %}
-                                    Cart
-                                {% endif %}
-                            </a>
-                        </li>
-                    </ul>
-                  </div>
-              </div>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+      <div class="container">
+        <!-- Site logo and name -->
+        <a href="/" class="navbar-brand d-flex align-items-center">
+          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+            <use xlink:href="#bootstrap"></use>
+          </svg>
+          Magazi
+        </a>
+        <!-- Toggle button for collapse -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeaderContent"
+                aria-controls="navbarHeaderContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Collapsible content -->
+        <div class="collapse navbar-collapse" id="navbarHeaderContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <!-- Home Menu Item -->
+            <li class="nav-item">
+              <a href="/" class="nav-link {% if request.path == '/' %}text-secondary{% else %}text-white{% endif %}">
+                <i class="bi bi-house d-block mx-auto mb-1"></i>
+                Home
+              </a>
+            </li>
+            <!-- Orders Menu Item -->
+            <li class="nav-item">
+              {% if user.is_authenticated %}
+                {% if user.is_staff or user|in_group:"seller" %}
+                  <a href="{% url 'orders:orders_summary' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
+                    <i class="bi bi-table d-block mx-auto mb-1"></i>
+                    Orders
+                  </a>
+                {% else %}
+                  <a href="{% url 'orders:my_orders' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
+                    <i class="bi bi-table d-block mx-auto mb-1"></i>
+                    Orders
+                  </a>
+                {% endif %}
+              {% else %}
+                <a href="{% url 'orders:order_lookup' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
+                  <i class="bi bi-table d-block mx-auto mb-1"></i>
+                  Orders
+                </a>
+              {% endif %}
+            </li>
+            <!-- Products Menu Item -->
+            <li class="nav-item">
+              <a href="/products/" class="nav-link {% if request.path == '/products/' %}text-secondary{% else %}text-white{% endif %}">
+                <i class="bi bi-grid d-block mx-auto mb-1"></i>
+                Products
+              </a>
+            </li>
+            <!-- My Account Menu Item (if authenticated) -->
+            {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a href="{% url 'profiles:my_profile' %}" class="nav-link {% if request.path|slice:"0:13" == '/profiles/my' %}text-secondary{% else %}text-white{% endif %}">
+                  <i class="bi bi-person-circle d-block mx-auto mb-1"></i>
+                  My Account
+                </a>
+              </li>
+            {% endif %}
+            <!-- Cart Menu Item -->
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'cart:view_cart' %}">
+                <i class="fas fa-shopping-cart"></i>
+                {% if cart_total %}
+                  £{{ cart_total }}
+                {% else %}
+                  Cart
+                {% endif %}
+              </a>
+            </li>
+          </ul>
+          <!-- Search form -->
+          <form class="d-flex my-2 my-lg-0" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
+          </form>
+          <!-- Login/Logout buttons -->
+          <div class="d-flex align-items-center">
+            {% if user.is_authenticated %}
+              <a href="/accounts/logout/" class="btn btn-light text-dark me-2">Logout</a>
+            {% else %}
+              <a href="/accounts/login/" class="btn btn-light text-dark me-2">Login</a>
+              <a href="/accounts/signup/" class="btn btn-primary">Sign-up</a>
+            {% endif %}
           </div>
-          <div class="px-3 py-2 border-bottom mb-3">
-              <div class="container d-flex flex-wrap justify-content-center">
-                  <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
-                      <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-                  </form>
-                    <div class="text-end d-flex align-items-center">
-                        {% if user.is_authenticated %}
-                            <a href="/accounts/logout/" class="btn btn-light text-dark me-2">Logout</a>
-                        {% else %}
-                            <a href="/accounts/login/" class="btn btn-light text-dark me-2">Login</a>
-                            <a href="/accounts/signup/" class="btn btn-primary">Sign-up</a>
-                        {% endif %}
-                    </div>
-                </div>
-              </div>
-          </div>
-      </header>
-    {% endblock %}
+        </div>
+      </div>
+    </nav>
+  </header>
+{% endblock %}
 
-    {% block precontent %}  
-    {% endblock %}
+    {% block precontent %}{% endblock %}
 
-    {% block content %}
-    {% endblock %}
+    {% block content %}{% endblock %}
 
     <footer class="footer mt-auto py-3 bg-light">
-        <div class="container d-flex flex-wrap justify-content-center">
-            {% comment %} <span class="text-muted">Sticky footer content here.</span> {% endcomment %}
-            <div class="text-end d-flex align-items-center">
-                <div id="real-time" class="me-3 text-muted small">
-                    Real Time: <span id="real-time-display">Loading...</span>
-                </div>  
-                <div id="page-load-time" class="me-3 text-muted small">
-                    Page Loaded At: <span id="page-load-time-display">Loading...</span>
-                </div>
-                {% if user.is_authenticated %}
-                    <a href="/accounts/logout/" class="btn btn-light text-dark me-2">Logout</a>
-                {% else %}
-                    <a href="/accounts/login/" class="btn btn-light text-dark me-2">Login</a>
-                    <a href="/accounts/signup/" class="btn btn-primary">Sign-up</a>
-                {% endif %}
-            </div>
+      <div class="container d-flex flex-wrap justify-content-center">
+        <div class="text-end d-flex align-items-center">
+          <div id="real-time" class="me-3 text-muted small">
+            Real Time: <span id="real-time-display">Loading...</span>
+          </div>
+          <div id="page-load-time" class="me-3 text-muted small">
+            Page Loaded At: <span id="page-load-time-display">Loading...</span>
+          </div>
+          {% if user.is_authenticated %}
+            <a href="/accounts/logout/" class="btn btn-light text-dark me-2">Logout</a>
+          {% else %}
+            <a href="/accounts/login/" class="btn btn-light text-dark me-2">Login</a>
+            <a href="/accounts/signup/" class="btn btn-primary">Sign-up</a>
+          {% endif %}
         </div>
+      </div>
     </footer>
-    <!-- Cart Notification Modal -->
-    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+
+     <!-- Cart Notification Modal -->
+     <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered" style="position: fixed; top: 20px; left: 20px;">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="cartModalLabel">Cart Updated</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Cart Updated</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Your cart total: <strong id="cartTotalDisplay">£0.00</strong></p>
+                </div>
+                <div class="modal-footer">
+                    <a href="{% url 'products:product_list' %}" class="btn btn-secondary">Continue Shopping</a>
+                    <a href="{% url 'cart:view_cart' %}" class="btn btn-primary">Checkout</a>
+                </div>
             </div>
-            <div class="modal-body">
-            <p>Your cart total: <strong id="cartTotalDisplay">$0.00</strong></p>
-            </div>
-            <div class="modal-footer">
-            <a href="{% url 'products:product_list' %}" class="btn btn-secondary">Continue Shopping</a>
-            <a href="{% url 'cart:view_cart' %}" class="btn btn-primary">Checkout</a>
-            </div>
-        </div>
         </div>
     </div>
-    
-    <!-- Optional: A separate div for other notifications -->
+
+    <!-- Additional Notification (if needed) -->
     <div id="cart-notification" style="display: none;">
         <div class="cart-summary"></div>
     </div>
+
     {% block postloadjs %}
+        <script src="{% static 'js/script.js' %}"></script>
+        <script src="{% static 'js/cart.js' %}"></script>
     {% endblock %}
   </body>
 </html>

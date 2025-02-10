@@ -17,8 +17,14 @@
     box-shadow: none;
 }
 
-.product-card {
+/* .product-card {
     max-width: 370px;
     margin-left: auto;
     margin-right: auto;
+  } */
+
+  @media (max-width: 576px) {
+    .product-card {
+      max-width: 370px;
+    }
   }

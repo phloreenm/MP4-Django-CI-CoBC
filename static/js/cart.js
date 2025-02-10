@@ -1,182 +1,36 @@
 $(document).ready(function () {
-    $(".update-quantity").on("click", function () {
-        const row = $(this).closest("tr");
-        const itemId = row.data("item-id");
-        const action = $(this).data("action");
-        const quantityInput = row.find(".quantity-input");
-        let newQuantity = parseInt(quantityInput.val());
-
-        // Increment or decrement quantity
-        if (action === "increment") newQuantity++;
-        if (action === "decrement" && newQuantity > 1) newQuantity--;
-
-        // Debug: Log values
-        console.log("Item ID:", itemId);
-        console.log("Action:", action);
-        console.log("New Quantity:", newQuantity);
-
-        // Send AJAX request
-        $.ajax({
-            url: `/cart/update/${itemId}/`,
-            method: "POST",
-            data: {
-                quantity: newQuantity,
-                csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
-            },
-            success: function (response) {
-                if (response.item_total && response.cart_total) {
-                    // Update the item's total
-                    row.find(".quantity-input").val(response.item_quantity);
-                    row.find(".item-total").text(`£${response.item_total.toFixed(2)}`);
-
-                    // Update the cart total
-                    $("#cart-total").text(`Total Cost: £${response.cart_total.toFixed(2)}`);
-                } else {
-                    console.error("Invalid server response:", response);
-                    alert("Invalid response from the server.");
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error("AJAX Error:", error);
-                console.error("Status:", status);
-                alert("Failed to update the cart. Please try again.");
-            },
-        });
-    });
-
-    $(".quantity-input").on("change", function () {
-        const row = $(this).closest("tr");
-        const itemId = row.data("item-id");
-        const newQuantity = parseInt($(this).val());
-
-        // Debug: Log values
-        console.log("Item ID (on change):", itemId);
-        console.log("New Quantity (on change):", newQuantity);
-
-        // Send AJAX request
-        $.ajax({
-            url: `/cart/update/${itemId}/`,
-            method: "POST",
-            data: {
-                quantity: newQuantity,
-                csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
-            },
-            success: function (response) {
-                if (response.item_total && response.cart_total) {
-                    // Update the item's total
-                    row.find(".item-total").text(`£${response.item_total.toFixed(2)}`);
-
-                    // Update the cart total
-                    $("#cart-total").text(`Total Cost: £${response.cart_total.toFixed(2)}`);
-                } else {
-                    console.error("Invalid server response:", response);
-                    alert("Invalid response from the server.");
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error("AJAX Error:", error);
-                console.error("Status:", status);
-                alert("Failed to update the cart. Please try again.");
-            },
-        });
-    });
-});
-
-document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
-    button.addEventListener("click", (event) => {
-        event.preventDefault();
-
-        const productId = button.dataset.productId;
-        const url = `/cart/add/${productId}/`;
-
-        // Send AJAX request
-        fetch(url, {
-            method: "GET",
-            headers: {
-                "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
-            },
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.error) {
-                showNotification(data.error, "danger");
-            } else {
-                showNotification(data.success, "success");
-
-                // Update Cart Total in Navbar
-                document.getElementById("cart-total").innerText = data.total_quantity;
-
-                // Update Total Cost on Cart Page (if it exists)
-                const totalCostElement = document.getElementById("total-cost");
-                if (totalCostElement) {
-                    totalCostElement.innerText = `£${data.total_cost}`;
-                }
-            }
-        })
-        .catch((error) => console.error("Error:", error));
-    });
-});
-
-// Function to display the notification
-function showNotification(message, type) {
-    const notification = document.getElementById("cart-notification");
-    notification.className = `alert alert-${type}`;
-    notification.querySelector(".cart-summary").innerText = message;
-    notification.style.display = "block";
-
-    // Hide the notification after 5 seconds
-    setTimeout(() => {
-        notification.style.display = "none";
-    }, 5000);
-};
-
-success: function (response) {
-    if (response.item_total && response.cart_total) {
-        // Update the item's total
-        row.find(".item-total").text(`£${response.item_total.toFixed(2)}`);
-
-        // Update the cart total in the navbar
-        $("#cart-total").text(response.cart_total_quantity);
-
-        // Update Total Cost on the Cart Page
-        const totalCostElement = $("#total-cost");
-        if (totalCostElement.length) {
-            totalCostElement.text(`Total Cost: £${response.cart_total.toFixed(2)}`);
-        }
-    } else {
-        console.error("Invalid server response:", response);
-        alert("Invalid response from the server.");
-    }
-};
-
-$(document).ready(function () {
-    // Function to display the cart modal with the updated total.
-    function showCartModal(total) {
-        // Update the displayed cart total in the modal.
-        $('#cartTotalDisplay').text(total);
-        
-        // Initialize and show the modal.
-        var cartModalEl = document.getElementById('cartModal');
-        var cartModal = new bootstrap.Modal(cartModalEl, {
-            backdrop: true
-        });
-        cartModal.show();
-    }
-
-    // Function to display additional notifications.
+    // Funcția pentru afișarea notificărilor suplimentare
     function showNotification(message, type) {
         const notification = document.getElementById("cart-notification");
+        // Asigură-te că elementul conține un copil cu clasa "cart-summary"
+        // Dacă nu, poți crea unul:
+        let summaryElem = notification.querySelector(".cart-summary");
+        if (!summaryElem) {
+            summaryElem = document.createElement("div");
+            summaryElem.className = "cart-summary";
+            notification.appendChild(summaryElem);
+        }
         notification.className = `alert alert-${type}`;
-        notification.querySelector(".cart-summary").innerText = message;
+        summaryElem.innerText = message;
         notification.style.display = "block";
 
-        // Hide the notification after 5 seconds.
+        // Ascunde notificarea după 5 secunde
         setTimeout(() => {
             notification.style.display = "none";
         }, 5000);
     }
 
-    // Update quantity buttons.
+    // Funcția pentru afișarea modalei cu totalul actualizat al coșului
+    function showCartModal(total) {
+        // Actualizează totalul afișat în modal
+        document.getElementById('cartTotalDisplay').innerText = total;
+        // Inițializează și afișează modalul (asigură-te că markup-ul este în base.html)
+        var cartModalEl = document.getElementById('cartModal');
+        var cartModal = new bootstrap.Modal(cartModalEl, { backdrop: true });
+        cartModal.show();
+    }
+
+    // Manipularea evenimentelor pentru butoanele de incrementare/decrementare
     $(".update-quantity").on("click", function () {
         const row = $(this).closest("tr");
         const itemId = row.data("item-id");
@@ -184,11 +38,16 @@ $(document).ready(function () {
         const quantityInput = row.find(".quantity-input");
         let newQuantity = parseInt(quantityInput.val());
 
-        // Increment or decrement quantity.
+        // Incrementare sau decrementare
         if (action === "increment") newQuantity++;
         if (action === "decrement" && newQuantity > 1) newQuantity--;
 
-        // Send AJAX request to update quantity.
+        // Debug: Log valori
+        console.log("Item ID:", itemId);
+        console.log("Action:", action);
+        console.log("New Quantity:", newQuantity);
+
+        // Trimite cererea AJAX pentru actualizarea cantității
         $.ajax({
             url: `/cart/update/${itemId}/`,
             method: "POST",
@@ -198,8 +57,10 @@ $(document).ready(function () {
             },
             success: function (response) {
                 if (response.item_total && response.cart_total) {
+                    // Actualizează cantitatea și totalul pentru item
                     row.find(".quantity-input").val(response.item_quantity);
                     row.find(".item-total").text(`£${response.item_total.toFixed(2)}`);
+                    // Actualizează totalul coșului
                     $("#cart-total").text(`Total Cost: £${response.cart_total.toFixed(2)}`);
                 } else {
                     console.error("Invalid server response:", response);
@@ -214,12 +75,14 @@ $(document).ready(function () {
         });
     });
 
-    // Handle changes in the quantity input field.
     $(".quantity-input").on("change", function () {
         const row = $(this).closest("tr");
         const itemId = row.data("item-id");
         const newQuantity = parseInt($(this).val());
 
+        console.log("Item ID (on change):", itemId);
+        console.log("New Quantity (on change):", newQuantity);
+
         $.ajax({
             url: `/cart/update/${itemId}/`,
             method: "POST",
@@ -238,13 +101,12 @@ $(document).ready(function () {
             },
             error: function (xhr, status, error) {
                 console.error("AJAX Error:", error);
-                console.error("Status:", status);
                 alert("Failed to update the cart. Please try again.");
             },
         });
     });
 
-    // Event listener for "Add to Cart" buttons.
+    // Evenimentul pentru butoanele "Add to Cart"
     document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
         button.addEventListener("click", (event) => {
             event.preventDefault();
@@ -252,7 +114,7 @@ $(document).ready(function () {
             const productId = button.dataset.productId;
             const url = `/cart/add/${productId}/`;
 
-            // Send AJAX request to add the product to the cart.
+            // Trimite cererea AJAX pentru adăugarea produsului în coș
             fetch(url, {
                 method: "GET",
                 headers: {
@@ -266,17 +128,17 @@ $(document).ready(function () {
                 } else {
                     showNotification(data.success, "success");
 
-                    // Update Cart Total in Navbar.
+                    // Actualizează totalul coșului din navbar
                     document.getElementById("cart-total").innerText = data.total_quantity;
 
-                    // Update Total Cost on Cart Page (if it exists).
+                    // Actualizează costul total pe pagina coșului, dacă există
                     const totalCostElement = document.getElementById("total-cost");
                     if (totalCostElement) {
                         totalCostElement.innerText = `£${data.total_cost}`;
                     }
 
-                    // Call the modal to show the updated cart total.
-                    showCartModal(`£${data.total_cost}`);
+                    // Afișează modalul cu totalul coșului (formatat ca string)
+                    showCartModal(`£${data.total_cost.toFixed(2)}`);
                 }
             })
             .catch((error) => console.error("Error:", error));
