@@ -48,6 +48,8 @@
     {% endblock %}
 
     <title>Magazi {% block extra_title %}{% endblock %}</title></title>
+    {% comment %} <link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.ico" /> {% endcomment %}
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' fill='%230d6efd' viewBox='0 0 16 16'><path d='M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zm3.91 6.902a.5.5 0 0 0-.708-.706L7.5 9.902 5.8 8.2a.5.5 0 1 0-.7.707l2 2a.5.5 0 0 0 .7 0l4-4z'/></svg>" type="image/svg+xml">
   </head>
   <body>
