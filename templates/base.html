@@ -60,99 +60,99 @@
     {% endif %}
 
     {% block page_header %}
-  <header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
-      <div class="container">
-        <!-- Site logo and name -->
-        <a href="/" class="navbar-brand d-flex align-items-center">
-          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
-            <use xlink:href="#bootstrap"></use>
-          </svg>
-          Magazi
-        </a>
-        <!-- Toggle button for collapse -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeaderContent"
-                aria-controls="navbarHeaderContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- Collapsible content -->
-        <div class="collapse navbar-collapse" id="navbarHeaderContent">
-          {% comment %} <ul class="navbar-nav me-auto mb-2 mb-lg-0"> {% endcomment %}
-            <ul class="navbar-nav flex-column flex-lg-row me-auto mb-2 mb-lg-0">
-            <!-- Home Menu Item -->
-            <li class="nav-item">
-              <a href="/" class="nav-link {% if request.path == '/' %}text-secondary{% else %}text-white{% endif %}">
-                <i class="bi bi-house d-block mx-auto mb-1"></i>
-                Home
-              </a>
-            </li>
-            <!-- Orders Menu Item -->
-            <li class="nav-item">
-              {% if user.is_authenticated %}
-                {% if user.is_staff or user|in_group:"seller" %}
-                  <a href="{% url 'orders:orders_summary' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
-                    <i class="bi bi-table d-block mx-auto mb-1"></i>
-                    Orders
-                  </a>
-                {% else %}
-                  <a href="{% url 'orders:my_orders' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
-                    <i class="bi bi-table d-block mx-auto mb-1"></i>
-                    Orders
-                  </a>
-                {% endif %}
-              {% else %}
-                <a href="{% url 'orders:order_lookup' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
-                  <i class="bi bi-table d-block mx-auto mb-1"></i>
-                  Orders
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+            <div class="container">
+                <!-- Site logo and name -->
+                <a href="/" class="navbar-brand d-flex align-items-center">
+                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                    <use xlink:href="#bootstrap"></use>
+                </svg>
+                Magazi
                 </a>
-              {% endif %}
-            </li>
-            <!-- Products Menu Item -->
-            <li class="nav-item">
-              <a href="/products/" class="nav-link {% if request.path == '/products/' %}text-secondary{% else %}text-white{% endif %}">
-                <i class="bi bi-grid d-block mx-auto mb-1"></i>
-                Products
-              </a>
-            </li>
-            <!-- My Account Menu Item (if authenticated) -->
-            {% if user.is_authenticated %}
-              <li class="nav-item">
-                <a href="{% url 'profiles:my_profile' %}" class="nav-link {% if request.path|slice:"0:13" == '/profiles/my' %}text-secondary{% else %}text-white{% endif %}">
-                  <i class="bi bi-person-circle d-block mx-auto mb-1"></i>
-                  My Account
-                </a>
-              </li>
-            {% endif %}
-            <!-- Cart Menu Item -->
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'cart:view_cart' %}">
-                <i class="fas fa-shopping-cart"></i>
-                {% if cart_total %}
-                  £{{ cart_total }}
-                {% else %}
-                  Cart
-                {% endif %}
-              </a>
-            </li>
-          </ul>
-          <!-- Search form -->
-          <form class="d-flex my-2 my-lg-0" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
-          </form>
-          <!-- Login/Logout buttons -->
-          <div class="d-flex align-items-center">
-            {% if user.is_authenticated %}
-              <a href="/accounts/logout/" class="btn btn-light text-dark me-2">Logout</a>
-            {% else %}
-              <a href="/accounts/login/" class="btn btn-light text-dark me-2">Login</a>
-              <a href="/accounts/signup/" class="btn btn-primary">Sign-up</a>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </nav>
-  </header>
-{% endblock %}
+                <!-- Toggle button for collapse -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeaderContent"
+                        aria-controls="navbarHeaderContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Collapsible content -->
+                <div class="collapse navbar-collapse" id="navbarHeaderContent">
+                {% comment %} <ul class="navbar-nav me-auto mb-2 mb-lg-0"> {% endcomment %}
+                    <ul class="navbar-nav flex-column flex-lg-row me-auto mb-2 mb-lg-0">
+                    <!-- Home Menu Item -->
+                    <li class="nav-item">
+                    <a href="/" class="nav-link {% if request.path == '/' %}text-secondary{% else %}text-white{% endif %}">
+                        <i class="bi bi-house d-block mx-auto mb-1"></i>
+                        Home
+                    </a>
+                    </li>
+                    <!-- Orders Menu Item -->
+                    <li class="nav-item">
+                    {% if user.is_authenticated %}
+                        {% if user.is_staff or user|in_group:"seller" %}
+                        <a href="{% url 'orders:orders_summary' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
+                            <i class="bi bi-table d-block mx-auto mb-1"></i>
+                            Orders
+                        </a>
+                        {% else %}
+                        <a href="{% url 'orders:my_orders' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
+                            <i class="bi bi-table d-block mx-auto mb-1"></i>
+                            Orders
+                        </a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'orders:order_lookup' %}" class="nav-link {% if request.path|slice:"0:8" == '/orders/' %}text-secondary{% else %}text-white{% endif %}">
+                        <i class="bi bi-table d-block mx-auto mb-1"></i>
+                        Orders
+                        </a>
+                    {% endif %}
+                    </li>
+                    <!-- Products Menu Item -->
+                    <li class="nav-item">
+                    <a href="/products/" class="nav-link {% if request.path == '/products/' %}text-secondary{% else %}text-white{% endif %}">
+                        <i class="bi bi-grid d-block mx-auto mb-1"></i>
+                        Products
+                    </a>
+                    </li>
+                    <!-- My Account Menu Item (if authenticated) -->
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="{% url 'profiles:my_profile' %}" class="nav-link {% if request.path|slice:"0:13" == '/profiles/my' %}text-secondary{% else %}text-white{% endif %}">
+                        <i class="bi bi-person-circle d-block mx-auto mb-1"></i>
+                        My Account
+                        </a>
+                    </li>
+                    {% endif %}
+                    <!-- Cart Menu Item -->
+                    <li class="nav-item">
+                    <a href="{% url 'cart:view_cart' %}" class="nav-link">
+                        <i class="bi bi-cart"></i>
+                        {% if cart_total %}
+                            £{{ cart_total }}
+                        {% else %}
+                            Cart
+                        {% endif %}
+                    </a>
+                    </li>
+                </ul>
+                <!-- Search form -->
+                <form class="d-flex my-2 my-lg-0" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
+                </form>
+                <!-- Login/Logout buttons -->
+                <div class="d-flex align-items-center">
+                    {% if user.is_authenticated %}
+                    <a href="/accounts/logout/" class="btn btn-light text-dark me-2">Logout</a>
+                    {% else %}
+                    <a href="/accounts/login/" class="btn btn-light text-dark me-2">Login</a>
+                    <a href="/accounts/signup/" class="btn btn-primary">Sign-up</a>
+                    {% endif %}
+                </div>
+                </div>
+            </div>
+            </nav>
+        </header>
+    {% endblock %}
 
     {% block precontent %}{% endblock %}
 

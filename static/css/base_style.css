@@ -1,6 +1,7 @@
 *, ::after, ::before {
     box-sizing: border-box;
 }
+
 /* HTML, BODY */
 html, body {
     min-height: 100vh;
@@ -53,42 +54,60 @@ footer {
     color: #6c757d;
 }
 
+/* MOBILE VIEW: for viewports below 992px */
 @media (max-width: 992px) {
-    /* Style the collapsed navbar container */
-    .navbar-collapse {
-      background-color: #343a40;  /* A dark background; */
-      padding: 1rem;
-    }
-    
-    /* Style each nav item when the navbar is collapsed */
-    .navbar-collapse .nav-item {
-      margin: 0.5rem 0;
-    }
-    
-    /* Style each nav link for the collapsed state */
-    .navbar-collapse .nav-link {
-      color: #ffffff;         /* Set text color */
-      font-size: 1.1rem;        /* Increase font size for easier tap targets */
-      padding: 0.75rem 1rem;    /* Add padding for a button-like feel */
-      border-radius: 0.25rem;   /* Optional: rounded corners */
-      text-align: center;       /* Center the text */
-      display: block;           /* Ensure links take full width */
-    }
-    
-    /* Optional: hover or active state styling */
-    .navbar-collapse .nav-link:hover,
-    .navbar-collapse .nav-link:focus {
-      background-color: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
-    }
-  
-    .navbar-nav .nav-item {
-      text-align: center;
-      padding: 0.5rem 0;
-    }
-    .navbar-nav .nav-link {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+  /* Style the collapsed navbar container */
+  .navbar-collapse {
+    background-color: #343a40;  /* Dark background */
+    padding: 1rem;
   }
+
+  /* Adjust nav item spacing */
+  .navbar-collapse .nav-item {
+    margin: 0.5rem 0;
+    text-align: left;
+  }
+
+  /* Arrange nav-link content in a row: icon on left, text on right */
+  .navbar-collapse .nav-link {
+    color: #ffffff;           /* White text */
+    font-size: 1.1rem;         /* Increased font size for better tap targets */
+    padding: 0.75rem 1rem;     /* Padding for a button-like feel */
+    border-radius: 0.25rem;    /* Optional rounded corners */
+    display: flex;             /* Use flex to arrange children */
+    flex-direction: row;       /* Icon and text in a row */
+    align-items: center;       /* Vertically center both icon and text */
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  /* Icon styling in mobile view */
+  .navbar-collapse .nav-link i {
+    display: inline-block !important;
+    margin: 0 0.5rem 0 0 !important;  /* Right margin for spacing */
+    vertical-align: middle;
+  }
+}
+
+/* DESKTOP VIEW: for viewports 992px and above */
+@media (min-width: 992px) {
+  /* Arrange nav-link content in a column: icon on top, text below */
+  .navbar-collapse .nav-link {
+    color: #ffffff;           /* White text */
+    font-size: 1.1rem;         /* Font size */
+    padding: 0.75rem 1rem;     /* Padding */
+    border-radius: 0.25rem;    /* Rounded corners */
+    display: flex;             /* Use flex layout */
+    flex-direction: column;    /* Stack icon above text */
+    align-items: center;       /* Center content horizontally */
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Icon styling in desktop view */
+  .navbar-collapse .nav-link i {
+    display: inline-block !important;
+    margin: 0 0 0.25rem 0 !important;  /* Margin below the icon for spacing */
+    vertical-align: middle;
+  }
+}
