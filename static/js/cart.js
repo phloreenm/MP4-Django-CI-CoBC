@@ -1,9 +1,6 @@
 $(document).ready(function () {
-    // Funcția pentru afișarea notificărilor suplimentare
     function showNotification(message, type) {
         const notification = document.getElementById("cart-notification");
-        // Asigură-te că elementul conține un copil cu clasa "cart-summary"
-        // Dacă nu, poți crea unul:
         let summaryElem = notification.querySelector(".cart-summary");
         if (!summaryElem) {
             summaryElem = document.createElement("div");
@@ -14,23 +11,18 @@ $(document).ready(function () {
         summaryElem.innerText = message;
         notification.style.display = "block";
 
-        // Ascunde notificarea după 5 secunde
         setTimeout(() => {
             notification.style.display = "none";
         }, 5000);
     }
 
-    // Funcția pentru afișarea modalei cu totalul actualizat al coșului
     function showCartModal(total) {
-        // Actualizează totalul afișat în modal
         document.getElementById('cartTotalDisplay').innerText = total;
-        // Inițializează și afișează modalul (asigură-te că markup-ul este în base.html)
         var cartModalEl = document.getElementById('cartModal');
         var cartModal = new bootstrap.Modal(cartModalEl, { backdrop: true });
         cartModal.show();
     }
 
-    // Manipularea evenimentelor pentru butoanele de incrementare/decrementare
     $(".update-quantity").on("click", function () {
         const row = $(this).closest("tr");
         const itemId = row.data("item-id");
@@ -38,16 +30,13 @@ $(document).ready(function () {
         const quantityInput = row.find(".quantity-input");
         let newQuantity = parseInt(quantityInput.val());
 
-        // Incrementare sau decrementare
         if (action === "increment") newQuantity++;
         if (action === "decrement" && newQuantity > 1) newQuantity--;
 
-        // Debug: Log valori
         console.log("Item ID:", itemId);
         console.log("Action:", action);
         console.log("New Quantity:", newQuantity);
 
-        // Trimite cererea AJAX pentru actualizarea cantității
         $.ajax({
             url: `/cart/update/${itemId}/`,
             method: "POST",
@@ -57,10 +46,8 @@ $(document).ready(function () {
             },
             success: function (response) {
                 if (response.item_total && response.cart_total) {
-                    // Actualizează cantitatea și totalul pentru item
                     row.find(".quantity-input").val(response.item_quantity);
                     row.find(".item-total").text(`£${response.item_total.toFixed(2)}`);
-                    // Actualizează totalul coșului
                     $("#cart-total").text(`Total Cost: £${response.cart_total.toFixed(2)}`);
                 } else {
                     console.error("Invalid server response:", response);
@@ -106,7 +93,6 @@ $(document).ready(function () {
         });
     });
 
-    // Evenimentul pentru butoanele "Add to Cart"
     document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
         button.addEventListener("click", (event) => {
             event.preventDefault();
@@ -114,7 +100,6 @@ $(document).ready(function () {
             const productId = button.dataset.productId;
             const url = `/cart/add/${productId}/`;
 
-            // Trimite cererea AJAX pentru adăugarea produsului în coș
             fetch(url, {
                 method: "GET",
                 headers: {
@@ -137,7 +122,6 @@ $(document).ready(function () {
                         totalCostElement.innerText = `£${data.total_cost}`;
                     }
 
-                    // Afișează modalul cu totalul coșului (formatat ca string)
                     showCartModal(`£${data.total_cost.toFixed(2)}`);
                 }
             })
