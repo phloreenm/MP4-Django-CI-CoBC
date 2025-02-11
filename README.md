@@ -371,6 +371,7 @@ Credits
 
 Code Snippets & Libraries
 	•	Bootstrap 5.3: For responsive UI.
+	• 	[Nav Bar Bootsrap 5](https://getbootstrap.com/docs/5.0/components/navbar/)
 	•	Stripe API: For secure payment processing.
 	•	python-decouple: For managing environment variables.
 	•	django-countries: For handling country fields.

@@ -77,7 +77,8 @@
         </button>
         <!-- Collapsible content -->
         <div class="collapse navbar-collapse" id="navbarHeaderContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          {% comment %} <ul class="navbar-nav me-auto mb-2 mb-lg-0"> {% endcomment %}
+            <ul class="navbar-nav flex-column flex-lg-row me-auto mb-2 mb-lg-0">
             <!-- Home Menu Item -->
             <li class="nav-item">
               <a href="/" class="nav-link {% if request.path == '/' %}text-secondary{% else %}text-white{% endif %}">
