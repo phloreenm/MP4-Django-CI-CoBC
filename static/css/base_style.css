@@ -52,3 +52,43 @@ footer {
     font-weight: bold;
     color: #6c757d;
 }
+
+@media (max-width: 992px) {
+    /* Style the collapsed navbar container */
+    .navbar-collapse {
+      background-color: #343a40;  /* A dark background; */
+      padding: 1rem;
+    }
+    
+    /* Style each nav item when the navbar is collapsed */
+    .navbar-collapse .nav-item {
+      margin: 0.5rem 0;
+    }
+    
+    /* Style each nav link for the collapsed state */
+    .navbar-collapse .nav-link {
+      color: #ffffff;         /* Set text color */
+      font-size: 1.1rem;        /* Increase font size for easier tap targets */
+      padding: 0.75rem 1rem;    /* Add padding for a button-like feel */
+      border-radius: 0.25rem;   /* Optional: rounded corners */
+      text-align: center;       /* Center the text */
+      display: block;           /* Ensure links take full width */
+    }
+    
+    /* Optional: hover or active state styling */
+    .navbar-collapse .nav-link:hover,
+    .navbar-collapse .nav-link:focus {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+  
+    .navbar-nav .nav-item {
+      text-align: center;
+      padding: 0.5rem 0;
+    }
+    .navbar-nav .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
