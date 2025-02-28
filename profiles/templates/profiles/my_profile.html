@@ -31,8 +31,8 @@
                             <th scope="col">#</th>
                             <th scope="col">Product</th>
                             <th scope="col">Order Number</th>
-                            <th scope="col">Download</th>
                             <th scope="col">Date</th>
+                            <th scope="col">Download</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,11 +45,6 @@
                                         <a href="{% url 'orders:order_detail' download.order_number %}">{{ download.order_number|slice:":6" }}...</a>
                                 </td>
                                 <td>
-                                    <a href="{% url 'orders:download_product' download.order_number download.product.id %}" class="btn btn-sm btn-success">
-                                        Download
-                                    </a>
-                                </td>
-                                <td>
                                   <span class="small-text">
                                       {% if download.order_date %}
                                           {{ download.order_date|date:"d/m/Y H:i" }}
@@ -58,6 +53,11 @@
                                       {% endif %}
                                   </span>
                               </td>
+                                <td>
+                                    <a href="{% url 'orders:download_product' download.order_number download.product.id %}" class="btn btn-sm btn-success">
+                                        Download
+                                    </a>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -84,9 +84,7 @@
     transition: opacity 0.5s ease-out;
     pointer-events: none;
 }
-.small-text {
-  font-size: 0.8rem;
-}
+
 </style>
 
 <script>

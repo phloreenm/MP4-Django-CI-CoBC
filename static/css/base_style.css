@@ -14,6 +14,11 @@ main {
     flex: 1;
 }
 
+/* Smaller text for order number and date display */
+.small-text {
+  font-size: 0.8rem;
+}
+
 /* Custom alerts for Django messages */
 .custom-alert {
     font-size: 1.1rem;
