@@ -377,6 +377,7 @@ Code Snippets & Libraries
 	•	Django Allauth: For authentication.
 	•	Custom Middleware & Signals: For ensuring every user has an associated Profile.
 	•	[Sending Email in Django from Gmail](https://www.codingforentrepreneurs.com/blog/sending-email-in-django-from-gmail)
+	•	[User profile MDBootrap template](https://mdbootstrap.com/docs/standard/extended/profiles/)
 
 Future Enhancements
 	•	Enhanced Order Workflow:

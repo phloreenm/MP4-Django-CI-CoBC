@@ -6,6 +6,7 @@
     <table class="table">
         <thead>
             <tr>
+                {% comment %} <th>Item</th> {% endcomment %}
                 <th>Order Number</th>
                 <th>Date</th>
                 <th>Status</th>
@@ -16,10 +17,12 @@
         <tbody>
             {% for order in orders %}
             <tr>
-                <td>{{ order.order_number }}</td>
-                <td>{{ order.date|date:"M d, Y" }}</td>
-                <td>{{ order.status }}</td>
-                <td>£{{ order.grand_total }}</td>
+                {% comment %} <td>{{ order.full_name }}</td> {% endcomment %}
+                <td class="small-text"><a href="{% url 'orders:order_detail' order.order_number %}">{{ order.order_number|slice:":6" }}...</a></td>
+                {% comment %} <td>{{ order.order_number }}</td> {% endcomment %}
+                <td class="small-text">{{ order.date|date:"M d, Y" }}</td>
+                <td class="small-text">{{ order.status }}</td>
+                <td class="small-text">£{{ order.grand_total }}</td>
                 <td>
                     <a href="{% url 'orders:order_detail' order.order_number %}" class="btn btn-sm btn-info">View</a>
                     {% if order.status == "pending" %}

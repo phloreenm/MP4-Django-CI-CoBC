@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container my-4">
     <!-- My Profile Section -->
-    <h1>{{ request.user.profile.get_role }} Profile</h1>
+    {% comment %} <h1>{{ request.user.profile.get_role }} Profile</h1>
     <p><strong>Username:</strong> {{ request.user.username }}</p>
     <p><strong>Email:</strong> {{ request.user.email }}</p>
     <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
@@ -12,7 +12,124 @@
     <p><strong>Date of Birth:</strong> {{ profile.date_of_birth }}</p>
     {% if profile.bio %}
         <p><strong>Bio:</strong> {{ profile.bio }}</p>
-    {% endif %}
+    {% endif %} {% endcomment %}
+    <section class="w-100 p-4" style="background-color: #eee; border-radius: .5rem .5rem 0 0;">
+      <div class="row">
+        <!-- Optionally, you can add a breadcrumb or header here -->
+        <div class="col">
+          <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
+            <ol class="breadcrumb mb-0">
+              {% comment %} <li class="breadcrumb-item"><a href="#">Home</a></li> {% endcomment %}
+              {% comment %} <li class="breadcrumb-item"><a href="#">User</a></li> {% endcomment %}
+              <li class="breadcrumb-item active" aria-current="page">{{ request.user.profile.get_role }} Profile</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    
+      <div class="row">
+        <!-- Left Column: Profile Picture (optional) -->
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              {% if profile.profile_picture %}
+                <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="rounded-circle img-fluid" style="width: 150px;">
+              {% else %}
+                <img src="https://via.placeholder.com/150" alt="Profile Picture" class="rounded-circle img-fluid" style="width: 150px;">
+              {% endif %}
+              <h5 class="my-3">{{ request.user.username }}</h5>
+              {% if profile.bio %}
+                <p class="text-muted mb-1">{{ profile.bio }}</p>
+              {% endif %}
+              <div class="d-flex justify-content-center mb-2">
+                <a href="{% url 'profiles:edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <!-- Right Column: Profile Details -->
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <!-- Username / Full Name -->
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Username</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ request.user.username }}</p>
+                </div>
+              </div>
+              <hr>
+              <!-- Email -->
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Email</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ request.user.email }}</p>
+                </div>
+              </div>
+              <hr>
+              <!-- Phone Number -->
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Phone Number</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ profile.phone_number }}</p>
+                </div>
+              </div>
+              <hr>
+              <!-- Address -->
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Address</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">
+                    {{ profile.street_address }}, {{ profile.city }}, {{ profile.postcode }}, {{ profile.country }}
+                  </p>
+                </div>
+              </div>
+              <hr>
+              <!-- County -->
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">County</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ profile.county }}</p>
+                </div>
+              </div>
+              <hr>
+              <!-- Date of Birth -->
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Date of Birth</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ profile.date_of_birth|date:"d/m/Y" }}</p>
+                </div>
+              </div>
+              {% if profile.bio %}
+              <hr>
+              <!-- Bio (if applicable) -->
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Bio</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ profile.bio }}</p>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
     {% if profile.profile_picture %}
         <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" style="max-width: 200px;">
     {% endif %}
