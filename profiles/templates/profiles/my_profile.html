@@ -42,7 +42,6 @@
                                 <td>{{ download.product.name }}</td>
                                 <td>
                                     <span class="order-number small-text" style="position: relative; cursor: pointer;" onclick="copyOrderNumber(this)" data-full="{{ download.order_number }}">
-                                        {% comment %} {{ download.order_number|slice:":6" }}... {% endcomment %}
                                         <a href="{% url 'orders:order_detail' download.order_number %}">{{ download.order_number|slice:":6" }}...</a>
                                 </td>
                                 <td>
@@ -51,8 +50,14 @@
                                     </a>
                                 </td>
                                 <td>
-                                  <span class="small-text">{{ download.order.date|date:"d/m/Y H:i" }}</span>
-                                </td>
+                                  <span class="small-text">
+                                      {% if download.order_date %}
+                                          {{ download.order_date|date:"d/m/Y H:i" }}
+                                      {% else %}
+                                          N/A
+                                      {% endif %}
+                                  </span>
+                              </td>
                             </tr>
                         {% endfor %}
                     </tbody>
