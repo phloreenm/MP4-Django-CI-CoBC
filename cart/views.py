@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from products.models import Product
 from django.contrib import messages
+from django.http import JsonResponse
 
 def view_cart(request):
     """Display basket contents"""
@@ -43,7 +44,7 @@ def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)  # Check if the product exists
     cart = request.session.get('cart', {})  # We get the cart from the session
 
-    # Adăugăm produsul în coș sau creștem cantitatea
+    # Add the product or increase quantity
     if str(product_id) in cart:
         cart[str(product_id)] += 1
     else:
@@ -53,7 +54,24 @@ def add_to_cart(request, product_id):
     request.session.modified = True  # Mark the session as modified
     print("Cart after addition:", request.session['cart'])  # Debugging only
 
-    return redirect('cart:view_cart')
+    # Calculate total cost and total quantity
+    total_cost = 0
+    total_quantity = 0
+    for item_id, quantity in cart.items():
+        prod = get_object_or_404(Product, pk=item_id)
+        total_cost += prod.price * quantity
+        total_quantity += quantity
+
+    # If this is an AJAX request, return JSON instead of redirecting
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        data = {
+            'success': f"{product.name} added to cart",
+            'total_cost': float(total_cost),
+            'total_quantity': total_quantity,
+        }
+        return JsonResponse(data)
+    else:
+        return redirect('cart:view_cart')
 
 
 def remove_from_cart(request, product_id):

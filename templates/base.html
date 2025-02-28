@@ -129,14 +129,16 @@
                     {% endif %}
                     <!-- Cart Menu Item -->
                     <li class="nav-item">
-                    <a href="{% url 'cart:view_cart' %}" class="nav-link">
-                        <i class="bi bi-cart"></i>
-                        {% if cart_total %}
-                            £{{ cart_total }}
-                        {% else %}
-                            Cart
-                        {% endif %}
-                    </a>
+                        <a href="{% url 'cart:view_cart' %}" class="nav-link">
+                            <i class="bi bi-cart"></i>
+                            <span id="cart-total">
+                                {% if cart_total %}
+                                    £{{ cart_total }}
+                                {% else %}
+                                    Cart
+                                {% endif %}
+                            </span>
+                        </a>
                     </li>
                 </ul>
                 <!-- Search form -->

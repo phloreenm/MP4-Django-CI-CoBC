@@ -12,7 +12,7 @@
 {% block content %}
 <div class="container my-4">
     <h1 class="text-center">Product List</h1>
-    
+    {% csrf_token %}
     <!-- Toggle Buttons -->
     <div class="d-flex justify-content-end mb-3">
         <a id="toggle-list" href="#" class="me-3" title="List View">
@@ -32,8 +32,6 @@
                     {% if product.image %}
                         <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
                     {% else %}
-                        {% comment %} <img src="https://via.placeholder.com/150" class="card-img-top" alt="Placeholder"> {% endcomment %}
-                        {% comment %} <img src="{% static 'images/placeholder.png' %}" class="card-img-top" alt="Placeholder"> {% endcomment %}
                         <div class="card-img-top d-flex justify-content-center align-items-center bg-light" style="height: 150px;">
                             <i class="bi bi-box-seam" style="font-size: 2rem; color: #6c757d;"></i>
                         </div>
@@ -45,11 +43,14 @@
                         <p class="card-text">{{ product.description|truncatechars:100 }}</p>
                         <p class="card-text text-primary fw-bold">£{{ product.price }}</p>
                         {% if product.stock > 0 %}
-                            <a href="{% url 'cart:add_to_cart' product.id %}" class="btn btn-primary">Add to Cart</a>
+                            <a href="{% url 'cart:add_to_cart' product.id %}" 
+                            class="btn btn-primary add-to-cart-btn" 
+                            data-product-id="{{ product.id }}">
+                            Add to Cart
+                            </a>
                         {% else %}
                             <button class="btn btn-secondary" disabled>Out of Stock</button>
                         {% endif %}
-                        {% comment %} <a href="{% url 'cart:add_to_cart' product.id %}" class="btn btn-primary">Add to Cart</a> {% endcomment %}
                     </div>
                 </div>
             </div>

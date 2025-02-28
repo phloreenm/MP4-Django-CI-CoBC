@@ -96,14 +96,15 @@ $(document).ready(function () {
     document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
         button.addEventListener("click", (event) => {
             event.preventDefault();
-
+    
             const productId = button.dataset.productId;
             const url = `/cart/add/${productId}/`;
-
+    
             fetch(url, {
                 method: "GET",
                 headers: {
                     "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                    "X-Requested-With": "XMLHttpRequest"  // added header for AJAX
                 },
             })
             .then((response) => response.json())
@@ -112,16 +113,16 @@ $(document).ready(function () {
                     showNotification(data.error, "danger");
                 } else {
                     showNotification(data.success, "success");
-
-                    // Actualizează totalul coșului din navbar
+    
+                    // Update the cart total in the navbar
                     document.getElementById("cart-total").innerText = data.total_quantity;
-
-                    // Actualizează costul total pe pagina coșului, dacă există
+    
+                    // Update the total cost on the cart page, if it exists
                     const totalCostElement = document.getElementById("total-cost");
                     if (totalCostElement) {
                         totalCostElement.innerText = `£${data.total_cost}`;
                     }
-
+    
                     showCartModal(`£${data.total_cost.toFixed(2)}`);
                 }
             })

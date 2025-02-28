@@ -1,7 +1,7 @@
 # MP4 Full Stack E-Shop  
 *Last Updated: February 04, 2025, 18:00*
 
-This is a Django-based full-stack e-commerce web application that allows users to browse, purchase, and manage digital products. The project integrates Stripe for secure payments and supports user authentication for a seamless shopping experience. The application is designed in a modular fashion—with separate apps for Checkout, Orders, Profiles (User Account Management), and (if needed) a Dashboard.
+This is a **Django-based full-stack e-commerce web application** that allows users to browse, purchase, and manage digital products. The project integrates **Stripe** for secure payments, supports user authentication, and provides a seamless shopping experience. The application is designed in a modular fashion—with separate apps for **Checkout**, **Orders**, **Profiles** (User Account Management), and a **Dashboard** for admin/seller functionalities.
 
 ---
 
@@ -370,14 +370,15 @@ In the Orders module, the total sum for an order sometimes appears as 0 (in both
 Credits
 
 Code Snippets & Libraries
-	•	Bootstrap 5.3: For responsive UI.
+	•	[Bootstrap 5.3](https://getbootstrap.com/docs/5.3/examples/starter-template/): For responsive UI, used starter templates examples for layout.
 	• 	[Nav Bar Bootsrap 5](https://getbootstrap.com/docs/5.0/components/navbar/)
-	•	Stripe API: For secure payment processing.
+	•	Stripe API: For secure payment processing - using [Sandbox Secret and publishable keys](https://docs.stripe.com/keys#obtain-api-keys)  
 	•	python-decouple: For managing environment variables.
 	•	django-countries: For handling country fields.
 	•	django-crispy-forms & crispy-bootstrap5: For form styling.
 	•	Django Allauth: For authentication.
 	•	Custom Middleware & Signals: For ensuring every user has an associated Profile.
+	•	[Sending Email in Django from Gmail](https://www.codingforentrepreneurs.com/blog/sending-email-in-django-from-gmail)
 
 Future Enhancements
 	•	Enhanced Order Workflow:
