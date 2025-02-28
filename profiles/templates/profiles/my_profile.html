@@ -20,7 +20,7 @@
         <a href="{% url 'profiles:edit_profile' %}" class="btn btn-primary">Edit Profile</a>
     </div>
 
-    <!-- My Downloads Section (Dynamic Table) -->
+    <!-- My Downloads Section  -->
     <div class="mt-5">
         <h2>My Downloads</h2>
         {% if downloads %}
@@ -41,10 +41,9 @@
                                 <td>{{ forloop.counter }}</td>
                                 <td>{{ download.product.name }}</td>
                                 <td>
-                                    <!-- Display a truncated order number with the full number stored in a data attribute -->
-                                    <span class="order-number" style="position: relative; cursor: pointer;" onclick="copyOrderNumber(this)" data-full="{{ download.order_number }}">
-                                        {{ download.order_number|slice:":6" }}...
-                                    </span>
+                                    <span class="order-number small-text" style="position: relative; cursor: pointer;" onclick="copyOrderNumber(this)" data-full="{{ download.order_number }}">
+                                        {% comment %} {{ download.order_number|slice:":6" }}... {% endcomment %}
+                                        <a href="{% url 'orders:order_detail' download.order_number %}">{{ download.order_number|slice:":6" }}...</a>
                                 </td>
                                 <td>
                                     <a href="{% url 'orders:download_product' download.order_number download.product.id %}" class="btn btn-sm btn-success">
@@ -52,7 +51,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    {{ download.order.date|date:"d/m/Y" }}
+                                  <span class="small-text">{{ download.order.date|date:"d/m/Y H:i" }}</span>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -65,7 +64,6 @@
     </div>
 </div>
 
-<!-- Inline CSS for the copy notification -->
 <style>
 .copy-message {
     position: absolute;
@@ -81,20 +79,19 @@
     transition: opacity 0.5s ease-out;
     pointer-events: none;
 }
+.small-text {
+  font-size: 0.8rem;
+}
 </style>
 
-<!-- JavaScript to copy the order number and display a temporary notification -->
 <script>
 function copyOrderNumber(element) {
     const orderNumber = element.getAttribute('data-full');
     navigator.clipboard.writeText(orderNumber).then(function() {
-        // Create a notification message element
         const msg = document.createElement('div');
         msg.className = 'copy-message';
         msg.textContent = 'Copied!';
-        // Append the message to the clicked element
         element.appendChild(msg);
-        // Remove the message after 1.5 seconds with a fade-out effect
         setTimeout(function() {
             msg.style.opacity = '0';
             setTimeout(function() {
