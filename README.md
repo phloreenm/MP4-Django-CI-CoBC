@@ -6,8 +6,6 @@ This is a **Django-based full-stack e-commerce web application** that allows use
 ---
 
 ## **Table of Contents**
-- [MP4 Full Stack E-Shop](#mp4-full-stack-e-shop)
-	- [**Table of Contents**](#table-of-contents)
 	- [**Project Overview**](#project-overview)
 	- [**UX \& UI Design**](#ux--ui-design)
 	- [**Features**](#features)
