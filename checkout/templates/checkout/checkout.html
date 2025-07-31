@@ -95,7 +95,6 @@
   const form = document.getElementById('payment-form');
   form.addEventListener('submit', async function(event) {
     event.preventDefault();
-    // Create PaymentMethod with Stripe
     const { paymentMethod, error } = await stripe.createPaymentMethod({
       type: "card",
       card: card,
@@ -103,7 +102,6 @@
     if (error) {
       document.getElementById('card-errors').textContent = error.message;
     } else {
-      // Append hidden inputs for payment_method_id and client_secret before normal form submission
       const hiddenPM = document.createElement('input');
       hiddenPM.setAttribute('type', 'hidden');
       hiddenPM.setAttribute('name', 'payment_method_id');
@@ -116,7 +114,7 @@
       hiddenCS.value = "{{ client_secret }}";
       form.appendChild(hiddenCS);
 
-      form.submit(); // Submit the form normally
+      form.submit();
     }
   });
 </script>

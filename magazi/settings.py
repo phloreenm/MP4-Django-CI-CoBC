@@ -132,14 +132,56 @@ WSGI_APPLICATION = 'magazi.wsgi.application'
 
 # Gmail Backend Configuration
 if config('ENVIRONMENT', default='development') == 'development':
-    EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", default=True)
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+    # For development, use console backend to avoid Gmail auth issues
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    # Uncomment the lines below when you're ready to use Gmail:
+    # EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", default=True)
+else:
+    # Production Gmail configuration - uncomment when ready to use Gmail
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = "smtp.gmail.com"
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# ==========================================
+# GMAIL CONFIGURATION FOR PRODUCTION USE
+# ==========================================
+# To enable Gmail for real email sending:
+#
+# 1. ENABLE 2-STEP VERIFICATION on your Google account:
+#    - Go to: https://myaccount.google.com/security
+#    - Turn on 2-Step Verification
+#
+# 2. CREATE AN APP PASSWORD:
+#    - Go to: https://myaccount.google.com/apppasswords
+#    - Select "Mail" and your device
+#    - Copy the 16-character password generated
+#
+# 3. SET ENVIRONMENT VARIABLES:
+#    - EMAIL_HOST_USER=your-gmail-address@gmail.com
+#    - EMAIL_HOST_PASSWORD=your-16-character-app-password
+#    - ENVIRONMENT=production (to switch from console to SMTP)
+#
+# 4. TO TEST GMAIL IN DEVELOPMENT: Replace the development section above with:
+#    if config('ENVIRONMENT', default='development') == 'development':
+#        EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", default=True)
+#        EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+#        EMAIL_HOST = "smtp.gmail.com"
+#        EMAIL_PORT = 587
+#        EMAIL_USE_TLS = True
+#        EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+#        EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+#        DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+#
+# Example .env file for Gmail:
+# EMAIL_HOST_USER=yourname@gmail.com
+# EMAIL_HOST_PASSWORD=abcd efgh ijkl mnop  # App password (with spaces)
+# ENVIRONMENT=development  # or production
+#
+# ==========================================
 
 
 # Database

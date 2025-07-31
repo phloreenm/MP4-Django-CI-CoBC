@@ -3,24 +3,14 @@
 {% block content %}
 <div class="container my-4">
     <!-- My Profile Section -->
-    {% comment %} <h1>{{ request.user.profile.get_role }} Profile</h1>
-    <p><strong>Username:</strong> {{ request.user.username }}</p>
-    <p><strong>Email:</strong> {{ request.user.email }}</p>
-    <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
-    <p><strong>Address:</strong> {{ profile.street_address }}, {{ profile.city }}, {{ profile.postcode }}, {{ profile.country }}</p>
-    <p><strong>County:</strong> {{ profile.county }}</p>
-    <p><strong>Date of Birth:</strong> {{ profile.date_of_birth }}</p>
-    {% if profile.bio %}
-        <p><strong>Bio:</strong> {{ profile.bio }}</p>
-    {% endif %} {% endcomment %}
     <section class="w-100 p-4" style="background-color: #eee; border-radius: .5rem .5rem 0 0;">
       <div class="row">
-        <!-- Optionally, you can add a breadcrumb or header here -->
+        <!-- Optional breadcrumb/header -->
         <div class="col">
           <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
             <ol class="breadcrumb mb-0">
-              {% comment %} <li class="breadcrumb-item"><a href="#">Home</a></li> {% endcomment %}
-              {% comment %} <li class="breadcrumb-item"><a href="#">User</a></li> {% endcomment %}
+              {# <li class="breadcrumb-item"><a href="#">Home</a></li> #}
+              {# <li class="breadcrumb-item"><a href="#">User</a></li> #}
               <li class="breadcrumb-item active" aria-current="page">{{ request.user.profile.get_role }} Profile</li>
             </ol>
           </nav>
@@ -28,7 +18,7 @@
       </div>
     
       <div class="row">
-        <!-- Left Column: Profile Picture (optional) -->
+        <!-- Left Column: Profile Picture -->
         <div class="col-lg-4">
           <div class="card mb-4">
             <div class="card-body text-center">
@@ -52,7 +42,27 @@
         <div class="col-lg-8">
           <div class="card mb-4">
             <div class="card-body">
-              <!-- Username / Full Name -->
+              <!-- First Name -->
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">First Name</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ request.user.first_name }}</p>
+                </div>
+              </div>
+              <hr>
+              <!-- Last Name -->
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Last Name</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ request.user.last_name }}</p>
+                </div>
+              </div>
+              <hr>
+              <!-- Username -->
               <div class="row">
                 <div class="col-sm-3">
                   <p class="mb-0">Username</p>
@@ -137,7 +147,7 @@
         <a href="{% url 'profiles:edit_profile' %}" class="btn btn-primary">Edit Profile</a>
     </div>
 
-    <!-- My Downloads Section  -->
+    <!-- My Downloads Section -->
     <div class="mt-5">
         <h2>My Downloads</h2>
         {% if downloads %}
@@ -160,6 +170,7 @@
                                 <td>
                                     <span class="order-number small-text" style="position: relative; cursor: pointer;" onclick="copyOrderNumber(this)" data-full="{{ download.order_number }}">
                                         <a href="{% url 'orders:order_detail' download.order_number %}">{{ download.order_number|slice:":6" }}...</a>
+                                    </span>
                                 </td>
                                 <td>
                                   <span class="small-text">
@@ -201,7 +212,6 @@
     transition: opacity 0.5s ease-out;
     pointer-events: none;
 }
-
 </style>
 
 <script>

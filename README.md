@@ -207,6 +207,79 @@ Then restart Django:
 python3 manage.py runserver
 ```
 
+## **Email Configuration**
+
+The application supports flexible email configuration for sending order confirmations and authentication emails. By default, it uses a console backend for development and can be configured to use Gmail SMTP for production.
+
+### **Development Mode (Default)**
+For development, emails are displayed in the console to avoid authentication issues:
+```python
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+```
+
+### **Gmail SMTP Configuration**
+
+To enable real email sending with Gmail:
+
+#### **1. Enable 2-Step Verification**
+- Go to: https://myaccount.google.com/security
+- Turn on 2-Step Verification for your Google account
+
+#### **2. Create an App Password**
+- Go to: https://myaccount.google.com/apppasswords
+- Select "Mail" and your device
+- Copy the 16-character password generated (keep the spaces)
+
+#### **3. Set Environment Variables**
+Create or update your `.env` file:
+```env
+EMAIL_HOST_USER=your-gmail-address@gmail.com
+EMAIL_HOST_PASSWORD=abcd efgh ijkl mnop  # App password (with spaces)
+ENVIRONMENT=production  # Switch to production mode
+```
+
+#### **4. Gmail Testing in Development**
+To test Gmail functionality while in development mode, update the development section in `settings.py`:
+```python
+if config('ENVIRONMENT', default='development') == 'development':
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = "smtp.gmail.com"
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+```
+
+### **Environment Variables Setup**
+
+For email configuration, add these variables to your `.env` file:
+```env
+# Email Configuration
+EMAIL_HOST_USER=yourname@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password-here
+ENVIRONMENT=development  # or production
+
+# Other required variables
+SECRET_KEY=your-secret-key
+STRIPE_PUBLIC_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+DEBUG=True
+```
+
+### **Email Features**
+- **Order Confirmations**: Automatic emails sent after successful checkout
+- **Account Authentication**: Email verification for user registration
+- **Flexible Backend**: Console display for development, SMTP for production
+- **Error Handling**: Checkout process continues even if email sending fails
+
+### **Troubleshooting Email Issues**
+- Ensure 2-step verification is enabled on your Google account
+- Use the exact 16-character app password (including spaces)
+- Check that `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD` are set correctly
+- For SSL certificate issues on macOS, the project includes `certifi` configuration
+
+---
 
 Orders Module
 

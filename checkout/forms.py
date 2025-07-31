@@ -1,7 +1,6 @@
 from django import forms
 from orders.models import Order
 
-
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
@@ -14,7 +13,7 @@ class OrderForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         """
-        Customize form fields with placeholders, classes, and autofocus
+        Customize form fields with placeholders, classes, and autofocus.
         """
         super().__init__(*args, **kwargs)
         placeholders = {
@@ -29,14 +28,14 @@ class OrderForm(forms.ModelForm):
             'comments': 'Any instructions or additional notes',
         }
 
-        # Autofocus the first field
+        # Autofocus the full name field
         self.fields['full_name'].widget.attrs['autofocus'] = True
 
-        # Add placeholders, classes, and remove labels
+        # Add placeholders, a common CSS class, and remove labels
         for field in self.fields:
-            if field != 'country':
+            if field in placeholders:
                 if self.fields[field].required:
-                    placeholder = f'{placeholders[field]} *'
+                    placeholder = f"{placeholders[field]} *"
                 else:
                     placeholder = placeholders[field]
                 self.fields[field].widget.attrs['placeholder'] = placeholder

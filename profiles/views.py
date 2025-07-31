@@ -31,7 +31,7 @@ def my_profile(request):
 def edit_profile(request):
     profile = request.user.profile
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        form = ProfileForm(request.POST, request.FILES, instance=profile, user=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, "Your profile has been updated.")
@@ -39,5 +39,5 @@ def edit_profile(request):
         else:
             messages.error(request, "Please correct the errors below.")
     else:
-        form = ProfileForm(instance=profile)
+        form = ProfileForm(instance=profile, user=request.user)
     return render(request, 'profiles/edit_profile.html', {'form': form})
