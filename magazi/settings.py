@@ -14,6 +14,12 @@ from pathlib import Path
 from decouple import config
 import os, certifi
 
+# Import dj_database_url only if available (for Heroku compatibility)
+try:
+    import dj_database_url
+except ImportError:
+    dj_database_url = None
+
 #For developement purposes only;  Remove the certifi import and the lone below before deploying to production
 if config('ENVIRONMENT', default='development') == 'development':
     os.environ['SSL_CERT_FILE'] = certifi.where() # This line sets the SSL_CERT_FILE environment variable to the path of the certifi file. This is required to use the requests library to make HTTPS requests.
@@ -78,6 +84,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -134,6 +141,7 @@ WSGI_APPLICATION = 'magazi.wsgi.application'
 if config('ENVIRONMENT', default='development') == 'development':
     # For development, use console backend to avoid Gmail auth issues
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    DEFAULT_FROM_EMAIL = 'noreply@magazi.com'  # Default email for development
     # Uncomment the lines below when you're ready to use Gmail:
     # EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", default=True)
 else:
@@ -144,7 +152,7 @@ else:
     EMAIL_USE_TLS = True
     EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
     EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER or 'noreply@magazi.com'
 
 # ==========================================
 # GMAIL CONFIGURATION FOR PRODUCTION USE
@@ -187,12 +195,19 @@ else:
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if ENVIRONMENT == 'production' and dj_database_url:
+    # Parse database URL from Heroku DATABASE_URL
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
-}
+else:
+    # SQLite for development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -231,6 +246,10 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# WhiteNoise configuration for Heroku static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
