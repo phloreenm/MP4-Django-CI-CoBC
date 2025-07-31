@@ -1,0 +1,114 @@
+[
+{
+  "model": "products.product",
+  "pk": 1,
+  "fields": {
+    "name": "The Path to Self-Discovery",
+    "description": "A Journey to Finding Your True Self",
+    "price": "9.99",
+    "image": "product_images/1.png",
+    "stock": 5,
+    "digital_file": "digital_products/1._The_Path_to_Self-Discovery.pdf",
+    "created_at": "2025-01-21T11:53:06.210Z",
+    "updated_at": "2025-02-08T23:19:16.482Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 2,
+  "fields": {
+    "name": "Unlocking Your Potential",
+    "description": "Discover the Key to Your Hidden Strengths",
+    "price": "21.55",
+    "image": "product_images/2.png",
+    "stock": 0,
+    "digital_file": "digital_products/2._Unlocking_Your_Potential.pdf",
+    "created_at": "2025-01-21T11:53:36.891Z",
+    "updated_at": "2025-02-06T20:55:21.885Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 3,
+  "fields": {
+    "name": "The Art of Mindfulness",
+    "description": "Mastering the Present Moment",
+    "price": "0.89",
+    "image": "product_images/3.png",
+    "stock": 9,
+    "digital_file": "digital_products/3._The_Art_of_Mindfulness.pdf",
+    "created_at": "2025-01-21T11:54:07.405Z",
+    "updated_at": "2025-07-31T21:20:01.461Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 4,
+  "fields": {
+    "name": "Building Resilience",
+    "description": "How to Overcome Life’s Challenges",
+    "price": "99.99",
+    "image": "product_images/4.png",
+    "stock": 11,
+    "digital_file": "digital_products/1_mrhUex2._The_Path_to_Self-Discovery.pdf",
+    "created_at": "2025-01-21T11:54:22.734Z",
+    "updated_at": "2025-02-08T22:21:02.089Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 5,
+  "fields": {
+    "name": "The Power of Habits",
+    "description": "Transform Your Life, One Habit at a Time",
+    "price": "4.50",
+    "image": "product_images/5.png",
+    "stock": 17,
+    "digital_file": "digital_products/2_5NyJ4nY._Unlocking_Your_Potential.pdf",
+    "created_at": "2025-01-21T11:54:43.335Z",
+    "updated_at": "2025-07-31T21:20:33.091Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 6,
+  "fields": {
+    "name": "Finding Your Purpose",
+    "description": "Uncover What Truly Matters to You",
+    "price": "7.20",
+    "image": "product_images/6.png",
+    "stock": 18,
+    "digital_file": "digital_products/3_ikD0OhA._The_Art_of_Mindfulness.pdf",
+    "created_at": "2025-01-21T11:54:57.712Z",
+    "updated_at": "2025-02-07T12:18:42.797Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 7,
+  "fields": {
+    "name": "Mastering Emotional Intelligence",
+    "description": "Harness the Power of Your Emotions",
+    "price": "8.90",
+    "image": "product_images/7.png",
+    "stock": 7,
+    "digital_file": "digital_products/1_1PurZXx._The_Path_to_Self-Discovery.pdf",
+    "created_at": "2025-01-21T11:55:16.781Z",
+    "updated_at": "2025-02-06T20:56:47.818Z"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 8,
+  "fields": {
+    "name": "The Joy of Gratitude",
+    "description": "Cultivate Positivity and Live a Fulfilling Life",
+    "price": "18.00",
+    "image": "product_images/8.png",
+    "stock": 7,
+    "digital_file": "digital_products/2_0M4crYp._Unlocking_Your_Potential.pdf",
+    "created_at": "2025-01-27T20:51:31.746Z",
+    "updated_at": "2025-02-06T20:56:53.980Z"
+  }
+}
+]

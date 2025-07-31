@@ -250,8 +250,14 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # WhiteNoise configuration for Heroku static files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# Media files configuration
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Add media files to WhiteNoise for Heroku production
+if ENVIRONMENT == 'production':
+    WHITENOISE_USE_FINDERS = True
+    WHITENOISE_AUTOREFRESH = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
